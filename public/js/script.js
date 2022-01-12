@@ -1,0 +1,486 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    const account = $("#account_number");
+    account.on('keyup', () => {
+        const account_number = account.val();
+        if (account_number.length >= 10) {
+            resolveAccountNumber();
+        }
+    });
+
+    $("#bank").on('change', () => {
+        if (account.val() !== '' && account.val().length >= 10) {
+            resolveAccountNumber();
+        }
+    });
+
+    function resolveAccountNumber() {
+        account.attr('readonly', true);
+        let d = new FormData();
+
+        // d.append('_token', $('#token').data('token'));
+        d.append('account_number', $('#account_number').val());
+        d.append('bank', $('#bank_code').val());
+        d.append('_token',  $('meta[name="csrf-token"]').attr('content'));
+        $.ajax({
+            url: '/account/resolve',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: d,
+            beforeSend: function () {
+                $('#accountHelpText').html(`<span class="text-primary">Resolving account number. Please wait... <span class="fas fa-circle-notch fa-spin"></span></i>`);
+            },
+            success: function (response) {
+                account.attr('readonly', false);
+
+                // console.log(response);
+                if (response.status === true) {
+                    $('#accountHelpText').html(`<span class="text-success">Success! ${response.message}</span>`);
+                    $('#account_name').val(response.data.account_name);
+                    $('#bank_name').val($('#bank_code option:selected').text());
+                    $('#accountSaveBtn').attr('disabled', false);
+                } else {
+                    $('#accountHelpText').html(`<span class="text-danger">${response.message}</span>`);
+                    $('#account_name').val('');
+                    $('#accountSaveBtn').attr('disabled', true);
+                }
+            },
+            error: function (request, error) {
+                account.attr('readonly', false);
+                $('#accountHelpText').html(`<span class="text-danger">Sorry! an error occurred, please try again</span>`);
+                $('#account_name').val('');
+                $('#accountSaveBtn').attr('disabled', true);
+            }
+        });
+    }
+
+    function calculateDynamicPrice(){
+        let currency = $("input[name='currency']:checked").val();
+        let amount = $("#amount").val();
+        let rate = $("#rate").val();
+        let sign = 'NGN ';
+        let csign = '₦';
+        let dynamicAmount = 0;
+        if(currency === 'NGN'){
+            // Divide the amount with the rate
+            const dollarFormat = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            });
+            dynamicAmount = (amount / rate);
+            dynamicAmount = dollarFormat.format(dynamicAmount);
+            sign = 'USD '
+            csign = '$'
+        }else{
+            const nairaFormat = Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'NGN'
+            });
+            // Multiply the amount with the rate
+            dynamicAmount = amount * rate;
+            dynamicAmount = nairaFormat.format(dynamicAmount);
+            sign = 'NGN '
+            csign = '₦'
+        }
+
+            // Add to html
+            $("#equiv_name").text(sign);
+            $("#converted").text(`${dynamicAmount}`);
+    }
+
+    const sell_amount = $("#amount");
+    sell_amount.on('input', () => {
+        calculateDynamicPrice();
+    });
+
+    let c = $("input:radio[name='currency']");
+
+    c.on('input',() => {
+       calculateDynamicPrice();
+    });
+    $("#wallet_id_btn").click(function(){
+        let text = $("#wallet_id").val();
+        alert(`Wallet address ${text} copied successfully!`);
+        // // $("#wallet_id").select();
+        // navigator.clipboard.writeText(text);
+        // document.execCommand('copy');
+        console.log(text);
+        copyText(text)
+    });
+
+    $("#account_btn").click(function(){
+        let text = $("#account_number");
+        alert(`Account number ${text.val()} copied successfully!`);
+        // text.select();
+        // text.setSelectionRange(0, 99999);
+        // navigator.clipboard.writeText(text.val()).then(function(){
+        //     console.log('copy successful');
+        // });
+        copyText(text.val());
+        // document.execCommand('copy');
+    });
+    // let acct = document.getElementById('account_btn');
+    // acct.addEventListener('copy', (event) => {
+    //     console.log('TUfiakwa');
+    //     let text = $("#account_number").val();
+    //     event.clipboardData.setData('text/plain', text);
+        // console.log('work joor');
+        // event.preventDefault();
+    // });
+
+    function copyText(text) {
+        let input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        console.log(text);
+
+        input.select();
+        input.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(text.value).then(function(res){
+            alert(res)
+        });
+        let result = document.execCommand('copy');
+        document.body.removeChild(input);
+    }
+
+    /*
+        Block user
+     */
+
+    $('#blockUser').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget) // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+        let active = button.data('active'); // Extract info from data-* attributes
+        let modal = $(this);
+        // modal.find('#blockUserForm').attr("action", form_action);
+        modal.find('#id').val(id);
+        if(active === 1){
+            modal.find('#toggleUserState').text('Block this user from performing any transactions?');
+            $('#blockUserBtn').text('Block');
+        }else if(active === 0){
+            modal.find('#toggleUserState').text('Allow this user to continue making use of the platform');
+            $('#blockUserBtn').text('Unblock');
+        }
+    });
+
+    $('#blockUserBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#blockUserForm").trigger('submit');
+    });
+
+    /*
+        Block User ends here
+     */
+
+    /*
+    Delete user
+ */
+
+    $('#deleteUser').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+        let active = button.data('active'); // Extract info from data-* attributes
+        let modal = $(this);
+        // modal.find('#blockUserForm').attr("action", form_action);
+        modal.find('#user_id').val(id);
+
+    });
+
+    $('#deleteUserBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#deleteUserForm").trigger('submit');
+    });
+
+    /*
+        Delete User ends here
+     */
+
+    /*
+        Delete Review
+    */
+
+    $('#deleteReview').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+
+        let modal = $(this);
+        // modal.find('#blockReviewForm').attr("action", form_action);
+        modal.find('#review_id').val(id);
+
+    });
+
+    $('#deleteReviewBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#deleteReviewForm").trigger('submit');
+    });
+
+    /*
+        Delete Review ends here
+     */
+
+    /*
+        Edit coin
+    */
+
+    $('#editCoin').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+        let name = button.data('name'); // Extract info from data-* attributes
+        let coin_id = button.data('coin_id'); // Extract info from data-* attributes
+        let address = button.data('address'); // Extract info from data-* attributes
+        let status = button.data('status'); // Extract info from data-* attributes
+        let modal = $(this);
+        // modal.find('#blockUserForm').attr("action", form_action);
+        modal.find('#id').val(id);
+        modal.find('#coin_id').val(coin_id);
+        modal.find('#name').val(name);
+        modal.find('#address').val(address);
+        if(parseInt(status) === 1){
+            modal.find('#exampleRadios1').prop("checked", true);
+        }else{
+            modal.find('#exampleRadios2').prop("checked", true);
+        }
+
+    });
+
+    $('#editCoinBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#editCoinForm").trigger('submit');
+    });
+
+    /*
+        Edit coin ends here
+     */
+
+    /*
+        Delete Coin
+     */
+    $('#deleteCoin').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let delid = button.data('delid'); // Extract info from data-* attributes
+
+        let modal = $(this);
+        // modal.find('#blockReviewForm').attr("action", form_action);
+        modal.find('#delid').val(delid);
+
+    });
+
+    $('#deleteCoinBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#deleteCoinForm").trigger('submit');
+    });
+
+    /*
+        Delete coin ends
+     */
+
+    let ratedIndex = -1;
+
+    $('.fa-star').on('click', (e) => {
+        ratedIndex = parseInt(e.target.getAttribute('data-index'));
+        $('#star-text').text(starText(ratedIndex));
+    });
+
+    $('.fa-star').mouseover((e) => {
+        resetStarColors();
+
+        let currentIndex = parseInt(e.target.getAttribute('data-index'));
+
+        for(let i = 0; i <= currentIndex; i++){
+            $(`.fa-star:eq(${i})`).css('color', 'green');
+        }
+    });
+
+    $('.fa-star').mouseleave(() => {
+        resetStarColors();
+
+        if(ratedIndex != -1){
+
+            for(let i = 0; i <= ratedIndex; i++){
+                $(`.fa-star:eq(${i})`).css('color', 'green');
+            }
+        }
+    });
+
+    const resetStarColors = () => {
+        $('.fa-star').css('color', 'black');
+    }
+
+    const saveRating = (ratingIndex) => {
+        const url = '/review/save';
+
+        let d = new FormData();
+
+        // d.append('_token', $('#token').data('token'));
+        d.append('vendor_id', $('#vendor').data('vendor'));
+        d.append('order_id', $('#vendor').data('order_id'));
+        d.append('rating', ratingIndex + 1);
+        d.append('feedback', $('#rating_feedback').val() || starText(ratingIndex));
+        if(ratingIndex !== null || ratingIndex !== undefined  || isNaN(ratingIndex)){
+            $.ajax({
+                url: url,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: d,
+                beforeSend: function(){
+                    $('#save-review').html(`<i class="fas fa-circle-notch fa-spin fa-pulse" disabled></i>`);
+                },
+                success: function (response) {
+                    let data = response;
+                    console.log(data);
+                    let message = data.success;
+                    msg.innerHTML = alertMessage('success', message);
+                    $('#save-review').html('Save review');
+                    interval(5000);
+                    // modal.close()
+                },
+                error: function(request, error){
+                    let message = JSON.parse(request.responseText);
+                    let errors = message.error;
+                    let ul = '<ul>';
+                    $.each(errors, (key, value) => {
+                        ul += value;
+                    });
+                    ul += '</ul>';
+                    msg.innerHTML = alertMessage('danger', ul);
+                    $('#save-review').html('Save review');
+                    interval(5000);
+                }
+            });
+        }
+
+    }
+
+    const starText = (index) => {
+        switch (index) {
+            case 0:
+                return 'Poor';
+            case 1:
+                return 'Bad';
+            case 2:
+                return 'Good';
+            case 3:
+                return 'Great';
+            case 4:
+                return 'Perfect';
+            default:
+                break;
+        }
+    }
+
+    $('#save-review').on('click', () =>{
+        if(ratedIndex != -1){
+            saveRating(ratedIndex);
+        }else{
+            console.log('rated index is not here');
+        }
+
+    });
+
+    // Show search dropdown
+    const search = $('#user_search');
+    const search_result = $('.user-search-result');
+    search.on('input', ()=>{
+        if(search.val() !== ''){
+            search.addClass('no-bottom-borders');
+            $('.search-result').css('display','block');
+            let terms = search.val();
+            const url = `users/${terms}/search`;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                beforeSend: function(){
+                    search_result.html('<p class="p-3">loading...</p>');
+                },
+                success: function (response) {
+                    // let data = JSON.parse(response);
+                    // console.log(response);
+                    let ul = '<ul class="list-group list-group-flush">';
+                    $.each(response.data, (key, value) => {
+                        // console.log(value);
+                        // $.each(value, (index, item)=>{
+                            console.log(value.name);
+
+                            ul += `<li class="list-group list-group-item">
+                                   <a href="user/${value.id}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6>${value.name}</h6>
+                                        <small>${value.phone !== null ? value.phone : ''}</small>
+                                    </div>
+                                    <p class="mb-1">${value.email}</p>
+                                    </a>
+                                </li>`;
+                        // });
+                    });
+                    ul += '</ul>';
+                    search_result.html(ul);
+
+                },
+                error: function(request, error){
+                    let errors = JSON.parse(request.responseText);
+                    $('#search-result-list').html('<p class="p-3">No result found</p>');
+                }
+            });
+        }else{
+            $('#search').removeClass('no-bottom-borders');
+            $('.search-result').css('display','none');
+        }
+
+    });
+    // ul += '<li class="list-group list-group-item"><div class="d-flex w-100 justify-content-between"><h6>' + item.firstname + ' ' + item.surname + '</h6><small>'+ item.phone +'</small></div><p class="mb-1">'+ item.email +'</p></li>';
+    search.on('blur', ()=>{
+        if(search.val() === ''){
+            $('#search').removeClass('no-bottom-borders');
+            $('.search-result').css('display','none');
+        }
+
+    });
+
+    const search_transaction = $('#transaction_search');
+    const t_search_result = $('.transaction-search-result');
+    search_transaction.on('input', ()=>{
+        if(search_transaction.val() !== '') {
+            console.log(search_transaction.val());
+            search_transaction.addClass('no-bottom-borders');
+            t_search_result.css('display', 'block');
+            let terms = search_transaction.val();
+            const url = `transactions/${terms}/search`;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                beforeSend: function () {
+                    t_search_result.html('<p class="p-3">loading...</p>');
+                },
+                success: function (response) {
+                    // let data = JSON.parse(response);
+                    let ul = '<ul class="list-group list-group-flush">';
+                    $.each(response.data, (key, value) => {
+
+                        ul += `<li class="list-group list-group-item">
+                                   <a href="/admin/transaction/${value.trx_ref}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6>#${value.trx_ref}</h6>
+                                        <small>${value.coin}</small>
+                                    </div>
+                                    <p class="mb-1">${value.rate}/$</p>
+                                    </a>
+                                </li>`;
+                        // });
+                    });
+                    ul += '</ul>';
+                    t_search_result.html(ul);
+
+                },
+                error: function (request, error) {
+                    let errors = JSON.parse(request.responseText);
+                    $('#search-result-list').html('<p class="p-3">No result found</p>');
+                }
+            });
+        }else{
+            t_search_result.css('display', 'none');
+        }
+    });
+});

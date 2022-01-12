@@ -1,0 +1,202 @@
+@extends('manager.layouts.managerbase')
+@section('page')
+    All Marketers
+@endsection
+@section('content')
+    <div class="container-fluid">
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if (session('warning'))
+            <div class="alert alert-warning" role="alert">
+                {{ session('warning') }}
+            </div>
+        @endif
+        <div class="row">
+            <div class="col-md-offset-6"></div>
+            <div class="col-md-6">
+                <div class="nav-item search-box mb-3" style="position: relative">
+                    <form class="app-search d-block">
+                        <input type="text" id="user_search" class="form-control" placeholder="Search users...">
+                        <a href="" class="active"><i class="fa fa-search"></i></a>
+                    </form>
+                    <div class="user-search-result">
+                        <ul class="list-group list-group-flush" id="search-result-list">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <div class="d-md-flex mb-3">
+                        <h3 class="box-title mb-0">Users</h3>
+                        <div class="col-md-3 col-sm-4 col-xs-6 ms-auto">
+                            {{--                            <select class="form-select shadow-none row border-top">--}}
+                            {{--                                <option>March 2021</option>--}}
+                            {{--                                <option>April 2021</option>--}}
+                            {{--                                <option>May 2021</option>--}}
+                            {{--                                <option>June 2021</option>--}}
+                            {{--                                <option>July 2021</option>--}}
+                            {{--                            </select>--}}
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table no-wrap">
+                            <thead>
+                            <tr>
+                                <th class="border-top-0">Name</th>
+                                <th class="border-top-0">Email</th>
+                                <th class="border-top-0">Phone</th>
+                                <th class="border-top-0">Joined</th>
+                                <th class="border-top-0">Status</th>
+                                <th class="border-top-0">View</th>
+                                <th class="border-top-0">Block</th>
+{{--                                <th class="border-top-0">Delete</th>--}}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if(!empty($users) && count($users) > 0)
+                                @foreach($users as $user)
+                                    <tr>
+                                        <td scope="row">{{ $user['name'] }}</td>
+                                        <td>{{ $user['email'] }}</td>
+                                        <td>{{ $user['phone'] }}</td>
+
+                                        <td>{{ $user['created_at']->diffForHumans() }}</td>
+                                        <td>
+                                            @if($user['status'] === 1)
+                                                <span class="badge bg-success">active</span>
+                                            @elseif($user['status'] === 0)
+                                                <span class="badge bg-danger">blocked</span>
+                                            @endif</td>
+                                        <td>
+                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('admin.user', $user['id']) }}">View</a>
+                                        </td>
+{{--                                        <td>--}}
+{{--                                            <form method="POST" action="{{ route('admin.confirm') }}">--}}
+{{--                                                @csrf--}}
+{{--                                                <input type="hidden" name="id" value="{{ $user['id'] }}">--}}
+{{--                                                <button type="submit" class="btn btn-primary btn-sm inline-block">Verify</button>--}}
+{{--                                            </form></td>--}}
+                                        <td>
+                                            <button class="btn btn-danger btn-sm inline-block text-white" title="Block user"
+                                                    data-toggle="modal"
+                                                    data-target="#blockUser"
+                                                    data-id="{{ $user['id'] }}"
+                                                    data-active="{{ $user['active'] }}" >
+                                                @if($user['status'] === 1)
+                                                    Block
+                                                @elseif($user['status'] === 0)
+                                                    Unblocked
+                                                @endif
+                                            </button>
+                                        </td>
+{{--                                        <td>--}}
+{{--                                            <button class="btn btn-danger btn-sm inline-block"--}}
+{{--                                                    data-toggle="modal"--}}
+{{--                                                    data-target="#deleteUser"--}}
+{{--                                                    data-id="{{ $user['id'] }}"><i class="fa fa-trash"></i></button>--}}
+{{--                                        </td>--}}
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="d-flex justify-content-center">No Users yet</div>
+                                    </td>
+                                </tr>
+                            @endif
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{--    <div id="blockUser" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">--}}
+{{--        <div class="modal-dialog">--}}
+{{--            <div class="modal-content">--}}
+{{--                <form action="{{ route('admin.user.block') }}" id="blockUserForm" method="POST">--}}
+{{--                    <div class="modal-header d-flex align-items-center">--}}
+{{--                        <h4 class="modal-title" id="myModalLabel">--}}
+{{--                            Block marketer--}}
+{{--                        </h4>--}}
+{{--                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-body">--}}
+{{--                        @csrf--}}
+{{--                        <input type="hidden" value="" id="id" name="id">--}}
+{{--                        <p id="toggleUserState"></p>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-footer">--}}
+{{--                        <button type="button" class="--}}
+{{--                                  btn btn-light-danger--}}
+{{--                                  text-danger--}}
+{{--                                  font-weight-medium--}}
+{{--                                  waves-effect" data-dismiss="modal">--}}
+{{--                            Close--}}
+{{--                        </button>--}}
+{{--                        <button id="blockUserBtn" type="submit" class="--}}
+{{--                                  btn btn-danger--}}
+{{--                                  font-weight-medium--}}
+{{--                                  text-white--}}
+{{--                                  waves-effect">--}}
+{{--                            Block user--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
+{{--                </form>--}}
+{{--            </div>--}}
+{{--            <!-- /.modal-content -->--}}
+{{--        </div>--}}
+{{--        <!-- /.modal-dialog -->--}}
+{{--    </div>--}}
+
+{{--    <div id="deleteUser" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">--}}
+{{--        <div class="modal-dialog">--}}
+{{--            <div class="modal-content">--}}
+{{--                <form action="{{ route('admin.user.delete') }}" id="deleteUserForm" method="POST">--}}
+{{--                    <div class="modal-header d-flex align-items-center">--}}
+{{--                        <h4 class="modal-title" id="myModalLabel">--}}
+{{--                            Delete Marketer--}}
+{{--                        </h4>--}}
+{{--                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-body">--}}
+{{--                        @csrf--}}
+{{--                        <input type="hidden" value="" id="user_id" name="id">--}}
+{{--                        <p>Delete marketer? <br>This action is not reversible</p>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-footer">--}}
+{{--                        <button type="button" class="--}}
+{{--                                  btn btn-light-danger--}}
+{{--                                  text-danger--}}
+{{--                                  font-weight-medium--}}
+{{--                                  waves-effect" data-dismiss="modal">--}}
+{{--                            Close--}}
+{{--                        </button>--}}
+{{--                        <button id="deleteUserBtn" type="submit" class="--}}
+{{--                                  btn btn-danger--}}
+{{--                                  font-weight-medium--}}
+{{--                                  text-white--}}
+{{--                                  waves-effect">--}}
+{{--                            Delete Marketer--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
+{{--                </form>--}}
+{{--            </div>--}}
+{{--            <!-- /.modal-content -->--}}
+{{--        </div>--}}
+{{--        <!-- /.modal-dialog -->--}}
+{{--    </div>--}}
+@endsection
