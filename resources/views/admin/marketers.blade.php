@@ -51,8 +51,8 @@
                                 <th class="border-top-0">Phone</th>
                                 <th class="border-top-0">Joined</th>
                                 <th class="border-top-0">Status</th>
-                                <th class="border-top-0">View</th>
-                                <th class="border-top-0">Block</th>
+{{--                                <th class="border-top-0">View</th>--}}
+{{--                                <th class="border-top-0">Block</th>--}}
 {{--                                <th class="border-top-0">Delete</th>--}}
                             </tr>
                             </thead>
@@ -65,15 +65,15 @@
                                         <td>{{ $user['phone'] }}</td>
 
                                         <td>{{ $user['created_at']->diffForHumans() }}</td>
-                                        <td>
-                                            @if($user['status'] === 1)
-                                                <span class="badge bg-success">active</span>
-                                            @elseif($user['status'] === 0)
-                                                <span class="badge bg-danger">blocked</span>
-                                            @endif</td>
-                                        <td>
-                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('admin.user', $user['id']) }}">View</a>
-                                        </td>
+{{--                                        <td>--}}
+{{--                                            @if($user['status'] === 1)--}}
+{{--                                                <span class="badge bg-success">active</span>--}}
+{{--                                            @elseif($user['status'] === 0)--}}
+{{--                                                <span class="badge bg-danger">blocked</span>--}}
+{{--                                            @endif</td>--}}
+{{--                                        <td>--}}
+{{--                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('admin.user', $user['id']) }}">View</a>--}}
+{{--                                        </td>--}}
 {{--                                        <td>--}}
 {{--                                            <form method="POST" action="{{ route('admin.confirm') }}">--}}
 {{--                                                @csrf--}}

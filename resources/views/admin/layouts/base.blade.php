@@ -20,6 +20,7 @@
     <link href="{{ asset('plugins/bower_components/chartist/dist/chartist.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css')}}">
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link href="{{ asset('css/amplestyle.min.css') }}" rel="stylesheet">
 {{--    <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">--}}
@@ -150,14 +151,14 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.branches') }}"
                            aria-expanded="false">
-                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <i class="fa fa-code-branch" aria-hidden="true"></i>
                             <span class="hide-menu">Branches</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.managers') }}"
                            aria-expanded="false">
-                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <i class="fas fa-user-cog" aria-hidden="true"></i>
                             <span class="hide-menu">Managers</span>
                         </a>
                     </li>
@@ -165,7 +166,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.manager.create') }}"
                            aria-expanded="false">
-                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            <i class="fa fa-user-check" aria-hidden="true"></i>
                             <span class="hide-menu">Add Manager</span>
                         </a>
                     </li>
@@ -173,7 +174,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.marketers') }}"
                            aria-expanded="false">
-                            <i class="fa fa-search" aria-hidden="true"></i>
+                            <i class="fa fa-users-cog" aria-hidden="true"></i>
                             <span class="hide-menu">Marketers</span>
                         </a>
                     </li>
@@ -181,7 +182,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.customers') }}"
                            aria-expanded="false">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            <i class="fa fa-users" aria-hidden="true"></i>
                             <span class="hide-menu">Customers</span>
                         </a>
                     </li>
@@ -189,7 +190,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.daily') }}"
                            aria-expanded="false">
-                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <i class="fa fa-handshake" aria-hidden="true"></i>
                             <span class="hide-menu">Daily Transaction</span>
                         </a>
                     </li>
@@ -203,7 +204,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.password') }}"
                            aria-expanded="false">
-                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <i class="fa fa-user-lock" aria-hidden="true"></i>
                             <span class="hide-menu">Change password</span>
                         </a>
                     </li>

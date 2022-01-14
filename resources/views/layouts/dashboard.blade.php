@@ -99,8 +99,9 @@
                     <!-- ============================================================== -->
                     <li>
                         <a class="profile-pic" href="#">
-                            <img src="{{ asset('plugins/images/users/varun.jpg')}}" alt="user-img" width="36"
-                                 class="img-circle"><span class="text-white font-medium">{{ auth()->user()->first_name }}</span></a>
+{{--                            <img src="{{ asset('plugins/images/users/varun.jpg')}}" alt="user-img" width="36"--}}
+{{--                                 class="img-circle">--}}Hi,
+                            <span class="text-white font-medium">{{ auth()->user()->name }}!</span></a>
                     </li>
                     <!-- ============================================================== -->
                     <!-- User profile and search -->

@@ -48,11 +48,11 @@
                             <tr>
                                 <th class="border-top-0">Name</th>
                                 <th class="border-top-0">Email</th>
-                                <th class="border-top-0">Phone</th>
+{{--                                <th class="border-top-0">Phone</th>--}}
                                 <th class="border-top-0">Joined</th>
                                 <th class="border-top-0">Status</th>
-                                <th class="border-top-0">View</th>
-                                <th class="border-top-0">Block</th>
+{{--                                <th class="border-top-0">View</th>--}}
+{{--                                <th class="border-top-0">Block</th>--}}
 {{--                                <th class="border-top-0">Delete</th>--}}
                             </tr>
                             </thead>
@@ -62,7 +62,7 @@
                                     <tr>
                                         <td scope="row">{{ $user['name'] }}</td>
                                         <td>{{ $user['email'] }}</td>
-                                        <td>{{ $user['phone'] }}</td>
+{{--                                        <td>{{ $user['phone'] }}</td>--}}
 
                                         <td>{{ $user['created_at']->diffForHumans() }}</td>
                                         <td>
@@ -71,28 +71,28 @@
                                             @elseif($user['status'] === 0)
                                                 <span class="badge bg-danger">blocked</span>
                                             @endif</td>
-                                        <td>
-                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('admin.user', $user['id']) }}">View</a>
-                                        </td>
+{{--                                        <td>--}}
+{{--                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('admin.user', $user['id']) }}">View</a>--}}
+{{--                                        </td>--}}
 {{--                                        <td>--}}
 {{--                                            <form method="POST" action="{{ route('admin.confirm') }}">--}}
 {{--                                                @csrf--}}
 {{--                                                <input type="hidden" name="id" value="{{ $user['id'] }}">--}}
 {{--                                                <button type="submit" class="btn btn-primary btn-sm inline-block">Verify</button>--}}
 {{--                                            </form></td>--}}
-                                        <td>
-                                            <button class="btn btn-danger btn-sm inline-block text-white" title="Block user"
-                                                    data-toggle="modal"
-                                                    data-target="#blockUser"
-                                                    data-id="{{ $user['id'] }}"
-                                                    data-active="{{ $user['active'] }}" >
-                                                @if($user['status'] === 1)
-                                                    Block
-                                                @elseif($user['status'] === 0)
-                                                    Unblocked
-                                                @endif
-                                            </button>
-                                        </td>
+{{--                                        <td>--}}
+{{--                                            <button class="btn btn-danger btn-sm inline-block text-white" title="Block user"--}}
+{{--                                                    data-toggle="modal"--}}
+{{--                                                    data-target="#blockUser"--}}
+{{--                                                    data-id="{{ $user['id'] }}"--}}
+{{--                                                    data-active="{{ $user['active'] }}" >--}}
+{{--                                                @if($user['status'] === 1)--}}
+{{--                                                    Block--}}
+{{--                                                @elseif($user['status'] === 0)--}}
+{{--                                                    Unblocked--}}
+{{--                                                @endif--}}
+{{--                                            </button>--}}
+{{--                                        </td>--}}
 {{--                                        <td>--}}
 {{--                                            <button class="btn btn-danger btn-sm inline-block"--}}
 {{--                                                    data-toggle="modal"--}}
@@ -104,7 +104,7 @@
                             @else
                                 <tr>
                                     <td colspan="7">
-                                        <div class="d-flex justify-content-center">No Users yet</div>
+                                        <div class="d-flex justify-content-center">No Marketers yet</div>
                                     </td>
                                 </tr>
                             @endif

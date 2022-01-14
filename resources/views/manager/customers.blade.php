@@ -59,7 +59,7 @@
                                         <td>{{ $user['phone'] }}</td>
                                         <td>{{ $user['created_at']->diffForHumans() }}</td>
                                         <td>
-                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('show', $user['id']) }}">View</a>
+                                            <a class="btn btn-info btn-sm inline-block" href="{{ route('manager.show', $user['id']) }}">View</a>
                                         </td>
                                     </tr>
                                 @endforeach

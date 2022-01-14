@@ -38,7 +38,7 @@
                         <div class="mt-1">
 {{--                            <a class="btn btn-success text-white" href="{{ route('save', $user->id) }}">Save</a>--}}
 {{--                            <a class="btn btn-danger text-white" href="{{ route('withdraw', $user->id) }}">Withdraw</a>--}}
-                            <a class="btn btn-info text-white" href="{{ route('manager.customer.history', $user->id) }}">History</a>
+                            <a class="btn btn-info text-white" href="{{ route('admin.customer.history', $user->id) }}">History</a>
                         </div>
                     </div>
                     <div class="card-body">

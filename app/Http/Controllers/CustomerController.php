@@ -52,6 +52,7 @@ class CustomerController extends Controller
         }else{
             $banks = [];
         }
+
         return view('newcustomer', compact('banks'));
     }
 
