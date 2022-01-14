@@ -13,6 +13,7 @@ use App\Models\Waitlist;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -156,5 +157,29 @@ class HomeController extends Controller
         $transactions = Transaction::where('customer_id', $id)->orderBy('id', 'desc')->simplePaginate(31);
         $balance = $wallet->balance;
         return view('manager.customerhistory', compact('transactions', 'balance'));
+    }
+
+
+    public function password(){
+        return view('password');
+    }
+
+    public function changePassword(Request $request){
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|string|min:8|confirmed'
+        ]);
+        $user = User::where('id',auth()->user()->id)->first();
+        if (Hash::check($request->old_password, $user->password)) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+//            $audit['user_id']= Auth::guard()->user()->id;
+//            $audit['reference']=Str::random(16);
+//            $audit['log']='Changed Password';
+//            Audit::create($audit);
+            return back()->with('success', 'Password Changed successfully.');
+        }elseif (!Hash::check($request->password, $user->password)) {
+            return back()->with('error', 'Invalid password');
+        }
     }
 }

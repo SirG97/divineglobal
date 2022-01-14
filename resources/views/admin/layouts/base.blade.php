@@ -171,7 +171,7 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.pending_sell_transactions') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.marketers') }}"
                            aria-expanded="false">
                             <i class="fa fa-search" aria-hidden="true"></i>
                             <span class="hide-menu">Marketers</span>
@@ -179,7 +179,7 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.pending_buy_transactions') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.customers') }}"
                            aria-expanded="false">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                             <span class="hide-menu">Customers</span>
@@ -187,24 +187,24 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.kyc_verification') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.daily') }}"
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Transactions</span>
+                            <span class="hide-menu">Daily Transaction</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.kyc_verification') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.history') }}"
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Wallet</span>
+                            <span class="hide-menu">Transaction History</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.kyc_verification') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.password') }}"
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Withdrawals</span>
+                            <span class="hide-menu">Change password</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -261,7 +261,7 @@
         <!-- ============================================================== -->
         <!-- footer -->
         <!-- ============================================================== -->
-        <footer class="footer text-center"> 2021 © CarlosExchange
+        <footer class="footer text-center"> 2021 © GDG Enterprise
 
         </footer>
         <!-- ============================================================== -->

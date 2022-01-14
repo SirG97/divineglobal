@@ -40,19 +40,12 @@ Route::get('users', [App\Http\Controllers\Admin\HomeController::class, 'users'])
 Route::get('user/{id}', [App\Http\Controllers\Admin\HomeController::class, 'userDetail'])->name('user');
 Route::get('user/{id}/transactions', [App\Http\Controllers\Admin\HomeController::class, 'userTransactions'])->name('user.transactions');
 Route::get('/users/{terms}/search', [App\Http\Controllers\Admin\HomeController::class, 'searchUsers'])->name('users.search');
-Route::get('transactions', [App\Http\Controllers\Admin\HomeController::class, 'transactions'])->name('transactions');
-Route::get('transaction/{id}', [App\Http\Controllers\Admin\HomeController::class, 'transaction'])->name('transaction');
-Route::get('/transactions/{terms}/search', [App\Http\Controllers\Admin\HomeController::class, 'searchTransactions'])->name('transactions.search');
-Route::post('transaction/approve', [App\Http\Controllers\Admin\HomeController::class, 'approveTransaction'])->name('transaction.approve');
-Route::post('transaction/reject', [App\Http\Controllers\Admin\HomeController::class, 'rejectTransaction'])->name('transaction.reject');
-Route::get('transaction/sell/pending', [App\Http\Controllers\Admin\HomeController::class, 'pendingSellTransactions'])->name('pending_sell_transactions');
-Route::get('transaction/buy/pending', [App\Http\Controllers\Admin\HomeController::class, 'pendingBuyTransactions'])->name('pending_buy_transactions');
-Route::get('identity/verify', [App\Http\Controllers\Admin\HomeController::class, 'identityVerification'])->name('kyc_verification');
-Route::post('identity/confirm', [App\Http\Controllers\Admin\HomeController::class, 'markUserAsVerified'])->name('confirm');
-Route::get('notifications', [App\Http\Controllers\Admin\HomeController::class, 'notifications'])->name('notifications');
-Route::get('support', [App\Http\Controllers\Admin\HomeController::class, 'tickets'])->name('support');
-Route::post('/ticket/comment', [App\Http\Controllers\Admin\HomeController::class, 'comment'])->name('ticket.comment');
-Route::get('/ticket/{id}', [App\Http\Controllers\Admin\HomeController::class, 'ticket'])->name('ticket.show');
-Route::get('/categories', [App\Http\Controllers\Admin\HomeController::class, 'categories'])->name('categories');
-
+Route::get('marketers', [App\Http\Controllers\Admin\HomeController::class, 'marketers'])->name('marketers');
+Route::get('/customers', [App\Http\Controllers\Admin\HomeController::class, 'customers'])->name('customers');
+Route::get('/daily', [App\Http\Controllers\Admin\HomeController::class, 'daily'])->name('daily');
+Route::get('/history', [App\Http\Controllers\Admin\HomeController::class, 'history'])->name('history');
+Route::get('/customer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'show'])->name('show');
+Route::get('/customer/{id}/history', [App\Http\Controllers\Admin\HomeController::class, 'customerHistory'])->name('customer.history');
+Route::get('/password', [App\Http\Controllers\Admin\HomeController::class, 'password'])->name('password');
+Route::post('/password',  [App\Http\Controllers\Admin\HomeController::class, 'changePassword'])->name('password.change');
 
