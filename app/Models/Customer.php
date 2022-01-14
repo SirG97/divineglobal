@@ -41,6 +41,7 @@ class Customer extends Model
         'bank_code',
         'account_name',
         'account_number',
+
     ];
 
     public function user(){

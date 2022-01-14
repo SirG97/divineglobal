@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
-
+@section('page')
+    Customer info
+@endsection
 @section('content')
     <div class="container-fluid">
 
@@ -35,11 +37,11 @@
                     <div class="card-header">Save
                         <div class="mt-1">
                             <a class="btn btn-danger text-white" href="{{ route('withdraw', $user->id) }}">Withdraw</a>
-                            <a class="btn btn-info text-white"  href="{{ route('history', $user->id) }}">History</a>
+                            <a class="btn btn-info text-white"  href="{{ route('customer.history', $user->id) }}">History</a>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class="form-horizontal form-material" method="POST" action="{{ route('withdraw.store') }}">
+                        <form class="form-horizontal form-material" method="POST" action="{{ route('mark') }}">
                             @csrf
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Name</label>
@@ -60,15 +62,23 @@
                                 </div>
                             </div>
                             <div class="form-group mb-4">
-                                <label class="col-md-12 p-0">Amount to withdraw(₦)</label>
+                                <label class="col-md-12 p-0">Daily amount(₦)</label>
                                 <div class="col-md-12 border-bottom p-0" >
-                                    <input type="text"  name="amount"
-                                           value="{{ $balance }}"
+                                    <input type="text"  name="daily_amount"
+                                           value="{{ $user->initial_unit }}"
+                                           class="form-control p-0 border-0">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="col-md-12 p-0">Date</label>
+                                <div class="col-md-12 border-bottom p-0" >
+                                    <input type="date"  name="date"
+
                                            class="form-control p-0 border-0">
                                 </div>
                             </div>
                             <div class="col-sm-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-danger text-white">Withdraw</button>
+                                <button type="submit" class="btn btn-success text-white">Save</button>
                             </div>
                         </form>
                     </div>

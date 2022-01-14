@@ -22,7 +22,7 @@
     <!-- Custom CSS -->
 
     <link href="{{ asset('css/amplestyle.min.css') }}" rel="stylesheet">
-    {{--    <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">--}}
+{{--        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">--}}
 
     <link href="{{ asset('css/extra.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.css') }}" defer></script>
@@ -125,14 +125,14 @@
                     <li class="sidebar-item pt-2">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/home"
                            aria-expanded="false">
-                            <i class="far fa-clock" aria-hidden="true"></i>
+                            <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
                             <span class="hide-menu">Dashboard</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('index') }}"
                            aria-expanded="false">
-                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <i class="fas fa-users" aria-hidden="true"></i>
                             <span class="hide-menu">Customers</span>
                         </a>
                     </li>
@@ -140,38 +140,32 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('create') }}"
                            aria-expanded="false">
-                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
                             <span class="hide-menu">Add Customer</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('savings') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('daily') }}"
                            aria-expanded="false">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                            <span class="hide-menu">Savings</span>
+                            <i class="fas fa-handshake" aria-hidden="true"></i>
+                            <span class="hide-menu">Daily transactions</span>
                         </a>
                     </li>
+
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('mark') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('history') }}"
                            aria-expanded="false">
-                            <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Mark Savings</span>
+                            <i class="fas fa-history" aria-hidden="true"></i>
+                            <span class="hide-menu">History</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('withdrawals') }}"
-                           aria-expanded="false">
-                            <i class="fa fa-bell" aria-hidden="true"></i>
-                            <span class="hide-menu">Withdrawals</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('withdraw') }}"
-                           aria-expanded="false">
-                            <i class="fa fa-headphones" aria-hidden="true"></i>
-                            <span class="hide-menu">Withdraw</span>
-                        </a>
-                    </li>
+{{--                    <li class="sidebar-item">--}}
+{{--                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('withdraw') }}"--}}
+{{--                           aria-expanded="false">--}}
+{{--                            <i class="fa fa-headphones" aria-hidden="true"></i>--}}
+{{--                            <span class="hide-menu">Withdraw</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('password') }}"
                            aria-expanded="false">
@@ -222,7 +216,7 @@
         <!-- ============================================================== -->
         <!-- footer -->
         <!-- ============================================================== -->
-        <footer class="footer text-center"> 2021 © CarlosExchange
+        <footer class="footer text-center"> 2022 © GDG Enterprise
 
         </footer>
         <!-- ============================================================== -->

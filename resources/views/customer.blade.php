@@ -30,12 +30,17 @@
                     </ul>
                 </div>
             @endif
-
-            <!-- Column -->
+            @include('includes.balance')
             <div class="col-lg-8 col-xlg-9 col-md-12">
 
                 <div class="card">
-                    <div class="card-header">Profile</div>
+                    <div class="card-header">Profile
+                    <div class="mt-1">
+                        <a class="btn btn-success text-white" href="{{ route('save', $user->id) }}">Save</a>
+                        <a class="btn btn-danger text-white" href="{{ route('withdraw', $user->id) }}">Withdraw</a>
+                        <a class="btn btn-info text-white" href="{{ route('customer.history', $user->id) }}">History</a>
+                    </div>
+                    </div>
                     <div class="card-body">
                         <form class="form-horizontal form-material" action="">
                             @csrf
@@ -181,7 +186,7 @@
                                 <label class="col-md-12 p-0">Daily amount</label>
                                 <div class="col-md-12 border-bottom p-0" >
                                     <input type="text"  name="office_address"
-                                           value="{{ $user->daily_amount }}"
+                                           value="{{ $user->initial_unit }}"
                                            class="form-control p-0 border-0">
                                 </div>
                             </div>
@@ -223,7 +228,7 @@
                         </form>
                     </div>
                     <div class="card-footer">
-                        <a class="btn btn-primary" href="{{ route('admin.user.transactions', $user->id) }}">User transactions</a>
+{{--                        <a class="btn btn-primary" href="{{ route('admin.user.transactions', $user->id) }}">User transactions</a>--}}
                     </div>
 
                 </div>
