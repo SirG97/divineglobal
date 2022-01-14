@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('manager.layouts.managerbase')
 
 @section('content')
     <div class="container">
@@ -24,17 +24,33 @@
         @endif
         <!-- ============================================================== -->
 
-        <!-- Pay, topup transfer -->
+            <!-- Pay, topup transfer -->
             <!-- ============================================================== -->
 
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    @include('includes.balance')
+                    <div class="card-group">
+                        <div class="card p-2 p-lg-3">
+                            <div class="p-lg-3 p-2">
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-circle btn-warning text-white btn-lg" href="javascript:void(0)">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </button>
+                                    <div class="ms-4" style="width: 38%">
+                                        <h4 class="fw-normal">Daily total</h4>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <h2 class="balance mb-0">₦{{ number_format($balance, '2', '.', ',') }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-12">
-
                     <div class="card">
-                        <div class="card-body">
+
+                        <div class="card-header">
                             <h5 class="card-title mb-0" style="margin-left: -15px">Transactions</h5>
                         </div>
                         <div class="table-responsive">
@@ -63,6 +79,7 @@
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="card-footer">
                             <div class="p-2">
                                 {!! $transactions->links() !!}

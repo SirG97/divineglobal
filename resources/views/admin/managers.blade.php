@@ -19,30 +19,30 @@
                         <table class="table no-wrap">
                             <thead>
                             <tr>
+                                <th class="border-top-0">Name</th>
                                 <th class="border-top-0">Email</th>
                                 <th class="border-top-0">Branch</th>
-                                <th class="border-top-0">Edit</th>
+{{--                                <th class="border-top-0">Edit</th>--}}
                                 {{--                                <th class="border-top-0">Delete</th>--}}
 
                             </tr>
                             </thead>
                             <tbody>
-                            @if(!empty($waitlists) && count($waitlists) > 0)
-                                @foreach($waitlists as $waitlist)
+                            @if(!empty($managers) && count($managers) > 0)
+                                @foreach($managers as $manager)
                                     <tr>
-                                        <td scope="row" class="txt-oflo">{{$waitlist['email']}}</td>
+                                        <td scope="row" class="txt-oflo">{{$manager['name']}}</td>
+                                        <td scope="row" class="txt-oflo">{{$manager['email']}}</td>
+                                        <td>{{ $manager->branch['name'] }}</td>
+{{--                                        <td>--}}
+{{--                                            <button class="btn btn-sm btn-warning"--}}
+{{--                                                    title="Edit branch details"--}}
+{{--                                                    data-toggle="modal"--}}
+{{--                                                    data-target="#editBranch"--}}
+{{--                                                    data-name="{{ $waitlist['name'] }}"--}}
 
-                                        <td>{{ $waitlist->branch['name'] }}</td>
-
-                                        <td>
-                                            <button class="btn btn-sm btn-warning"
-                                                    title="Edit branch details"
-                                                    data-toggle="modal"
-                                                    data-target="#editBranch"
-                                                    data-name="{{ $waitlist['name'] }}"
-
-                                                    data-id="{{ $waitlist['id'] }}">Edit</button>
-                                        </td>
+{{--                                                    data-id="{{ $waitlist['id'] }}">Edit</button>--}}
+{{--                                        </td>--}}
 
                                     </tr>
                                 @endforeach

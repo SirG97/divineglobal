@@ -164,7 +164,7 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.pending_buy_transactions') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.customers') }}"
                            aria-expanded="false">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                             <span class="hide-menu">Customers</span>
@@ -172,24 +172,17 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.kyc_verification') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.daily') }}"
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Savings</span>
+                            <span class="hide-menu">Daily savings</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.kyc_verification') }}"
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.history') }}"
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Wallet</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.kyc_verification') }}"
-                           aria-expanded="false">
-                            <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Withdrawals</span>
+                            <span class="hide-menu">History</span>
                         </a>
                     </li>
                     <li class="sidebar-item">

@@ -23,7 +23,7 @@ class CustomerController extends Controller
     }
 
     public function index(){
-        $users = Customer::where('user_id', auth()->user()->id)->simplePaginate(100);
+        $users = Customer::where('user_id', auth()->user()->id)->simplePaginate(50);
 
         return view('customers', compact('users'));
     }

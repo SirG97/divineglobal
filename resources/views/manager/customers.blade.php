@@ -1,6 +1,6 @@
-@extends('layouts.dashboard')
+@extends('manager.layouts.managerbase')
 @section('page')
-    All Users
+    All Customers
 @endsection
 @section('content')
     <div class="container-fluid">
