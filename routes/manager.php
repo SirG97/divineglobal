@@ -38,5 +38,7 @@ Route::get('/daily', [App\Http\Controllers\Manager\HomeController::class, 'daily
 Route::get('/history', [App\Http\Controllers\Manager\HomeController::class, 'history'])->name('history');
 Route::get('/customer/{id}', [App\Http\Controllers\Manager\HomeController::class, 'show'])->name('show');
 Route::get('/customer/{id}/history', [App\Http\Controllers\Manager\HomeController::class, 'customerHistory'])->name('customer.history');
+Route::get('/password', [App\Http\Controllers\Manager\HomeController::class, 'password'])->name('password');
+Route::post('/password',  [App\Http\Controllers\Manager\HomeController::class, 'changePassword'])->name('password.change');
 
 

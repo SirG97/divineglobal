@@ -161,7 +161,7 @@ class HomeController extends Controller
 
 
     public function password(){
-        return view('password');
+        return view('manager.password');
     }
 
     public function changePassword(Request $request){
@@ -169,7 +169,7 @@ class HomeController extends Controller
             'old_password' => 'required',
             'password' => 'required|string|min:8|confirmed'
         ]);
-        $user = User::where('id',auth()->user()->id)->first();
+        $user = User::where('id',auth('manager')->user()->id)->first();
         if (Hash::check($request->old_password, $user->password)) {
             $user->password = Hash::make($request->password);
             $user->save();

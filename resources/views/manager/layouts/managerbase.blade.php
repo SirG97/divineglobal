@@ -20,6 +20,7 @@
     <link href="{{ asset('plugins/bower_components/chartist/dist/chartist.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css')}}">
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link href="{{ asset('css/amplestyle.min.css') }}" rel="stylesheet">
     {{--    <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">--}}
@@ -150,7 +151,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.marketers') }}"
                            aria-expanded="false">
-                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <i class="fa fa-users-cog" aria-hidden="true"></i>
                             <span class="hide-menu">Marketers</span>
                         </a>
                     </li>
@@ -158,7 +159,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.marketer.create') }}"
                            aria-expanded="false">
-                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            <i class="fa fa-user-check" aria-hidden="true"></i>
                             <span class="hide-menu">Add Marketer</span>
                         </a>
                     </li>
@@ -166,7 +167,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.customers') }}"
                            aria-expanded="false">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            <i class="fa fa-users" aria-hidden="true"></i>
                             <span class="hide-menu">Customers</span>
                         </a>
                     </li>
@@ -174,7 +175,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.daily') }}"
                            aria-expanded="false">
-                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <i class="fa fa-handshake" aria-hidden="true"></i>
                             <span class="hide-menu">Daily savings</span>
                         </a>
                     </li>
@@ -183,6 +184,13 @@
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
                             <span class="hide-menu">History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.password') }}"
+                           aria-expanded="false">
+                            <i class="fa fa-user-lock" aria-hidden="true"></i>
+                            <span class="hide-menu">Change password</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
