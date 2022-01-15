@@ -24,10 +24,10 @@
             <div class="col-md-6">
                 <div class="nav-item search-box mb-3" style="position: relative">
                     <form class="app-search d-block">
-                        <input type="text" id="user_search" class="form-control" placeholder="Search users...">
+                        <input type="text" id="m_user_search" class="form-control" placeholder="Search users...">
                         <a href="" class="active"><i class="fa fa-search"></i></a>
                     </form>
-                    <div class="user-search-result">
+                    <div class="user-search-result" >
                         <ul class="list-group list-group-flush" id="search-result-list">
 
                         </ul>

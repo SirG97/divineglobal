@@ -48,4 +48,4 @@ Route::get('/customer/{id}', [App\Http\Controllers\Admin\HomeController::class, 
 Route::get('/customer/{id}/history', [App\Http\Controllers\Admin\HomeController::class, 'customerHistory'])->name('customer.history');
 Route::get('/password', [App\Http\Controllers\Admin\HomeController::class, 'password'])->name('password');
 Route::post('/password',  [App\Http\Controllers\Admin\HomeController::class, 'changePassword'])->name('password.change');
-
+Route::get('/customers/{id}/search', [App\Http\Controllers\Admin\HomeController::class, 'search'])->name('search');

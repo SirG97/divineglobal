@@ -182,4 +182,18 @@ class HomeController extends Controller
             return back()->with('error', 'Invalid password');
         }
     }
+
+
+    public function search($id){
+
+        $customers =  Customer::where([['first_name', 'LIKE', "%{$id}%"], ['branch_id','=', auth('manager')->user()->branch_id]])
+            ->orWhere([['surname', 'LIKE', "%{$id}%"],['branch_id','=', auth('manager')->user()->branch_id]])
+            ->orWhere([['phone', 'LIKE', "%{$id}%"],['branch_id','=', auth('manager')->user()->branch_id]])->with('branch')->get();
+
+        if($customers->count() > 0){
+            return response()->json(['data' => $customers, 'status' => 'success', 'message' => 'Customer(s) retrieved successfully']);
+        }else{
+            return response()->json(['data' => [], 'status' => 'error', 'message' => 'Customer retrieval failed']);
+        }
+    }
 }

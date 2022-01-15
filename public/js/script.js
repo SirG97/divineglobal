@@ -384,11 +384,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const search = $('#user_search');
     const search_result = $('.user-search-result');
     search.on('input', ()=>{
-        if(search.val() !== ''){
-            search.addClass('no-bottom-borders');
+        let id = search;
+        let url = `customers/${id.val()}/search`;
+        return searchCustomers(id, url);
+
+    });
+    const msearch = $('#m_user_search');
+
+    msearch.on('input', ()=>{
+        let id = msearch;
+        let url = `customers/${id.val()}/search`;
+        return searchCustomers(id, url);
+    });
+
+    search.on('blur', ()=>{
+        if(search.val() === ''){
+            $('#search').removeClass('no-bottom-borders');
+            $('.user-search-result').css('display','none');
+        }
+
+    });
+
+    function searchCustomers(id, url){
+        if(id.val() !== ''){
+            console.log(url);
+            id.addClass('no-bottom-borders');
             $('.search-result').css('display','block');
-            let terms = search.val();
-            const url = `users/${terms}/search`;
+
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -399,88 +421,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     // let data = JSON.parse(response);
                     // console.log(response);
                     let ul = '<ul class="list-group list-group-flush">';
-                    $.each(response.data, (key, value) => {
-                        // console.log(value);
-                        // $.each(value, (index, item)=>{
-                            console.log(value.name);
 
-                            ul += `<li class="list-group list-group-item">
-                                   <a href="user/${value.id}">
+                    $.each(response.data, (key, value) => {
+
+                        console.log(value.first_name);
+
+                        ul += `<li class="list-group list-group-item">
+                                   <a href="customer/${value.id}">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h6>${value.name}</h6>
+                                        <h6>${value.first_name} ${value.surname}</h6>
                                         <small>${value.phone !== null ? value.phone : ''}</small>
                                     </div>
-                                    <p class="mb-1">${value.email}</p>
+                                    <p class="mb-1">${value.branch.name}</p>
                                     </a>
                                 </li>`;
-                        // });
+
                     });
                     ul += '</ul>';
                     search_result.html(ul);
-
+                    $('.user-search-result').css('display','block');
                 },
                 error: function(request, error){
                     let errors = JSON.parse(request.responseText);
-                    $('#search-result-list').html('<p class="p-3">No result found</p>');
+                    $('.search-result-list').html('<p class="p-3">No result found</p>');
                 }
             });
         }else{
-            $('#search').removeClass('no-bottom-borders');
-            $('.search-result').css('display','none');
+            id.removeClass('no-bottom-borders');
+            $('.user-search-result').css('display','none');
         }
+    }
 
-    });
-    // ul += '<li class="list-group list-group-item"><div class="d-flex w-100 justify-content-between"><h6>' + item.firstname + ' ' + item.surname + '</h6><small>'+ item.phone +'</small></div><p class="mb-1">'+ item.email +'</p></li>';
-    search.on('blur', ()=>{
-        if(search.val() === ''){
-            $('#search').removeClass('no-bottom-borders');
-            $('.search-result').css('display','none');
-        }
+    function clearSearch(){
 
-    });
+    }
 
-    const search_transaction = $('#transaction_search');
-    const t_search_result = $('.transaction-search-result');
-    search_transaction.on('input', ()=>{
-        if(search_transaction.val() !== '') {
-            console.log(search_transaction.val());
-            search_transaction.addClass('no-bottom-borders');
-            t_search_result.css('display', 'block');
-            let terms = search_transaction.val();
-            const url = `transactions/${terms}/search`;
-            $.ajax({
-                url: url,
-                type: 'GET',
-                beforeSend: function () {
-                    t_search_result.html('<p class="p-3">loading...</p>');
-                },
-                success: function (response) {
-                    // let data = JSON.parse(response);
-                    let ul = '<ul class="list-group list-group-flush">';
-                    $.each(response.data, (key, value) => {
 
-                        ul += `<li class="list-group list-group-item">
-                                   <a href="/admin/transaction/${value.trx_ref}">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6>#${value.trx_ref}</h6>
-                                        <small>${value.coin}</small>
-                                    </div>
-                                    <p class="mb-1">${value.rate}/$</p>
-                                    </a>
-                                </li>`;
-                        // });
-                    });
-                    ul += '</ul>';
-                    t_search_result.html(ul);
+    //De gea, rudiger, emerson, jota, mount, lucas moura, ronaldo, can, king
 
-                },
-                error: function (request, error) {
-                    let errors = JSON.parse(request.responseText);
-                    $('#search-result-list').html('<p class="p-3">No result found</p>');
-                }
-            });
-        }else{
-            t_search_result.css('display', 'none');
-        }
-    });
 });

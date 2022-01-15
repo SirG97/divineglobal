@@ -236,7 +236,7 @@ class CustomerController extends Controller
         }
         $balance = $customerWallet->balance;
         $count = $customerWallet->count;
-        if($count < 5){
+        if($count < 30){
             Transaction::create([
                 'user_id' => auth()->user()->id,
                 'branch_id' => auth()->user()->branch_id,
@@ -374,5 +374,15 @@ class CustomerController extends Controller
         return view('customerhistory', compact('transactions', 'balance'));
     }
 
+    public function search($id){
+       $customers =  Customer::where([['first_name', 'LIKE', "%{$id}%"], ['user_id','=', auth()->user()->id]])
+            ->orWhere([['surname', 'LIKE', "%{$id}%"],['user_id','=', auth()->user()->id]])
+            ->orWhere([['phone', 'LIKE', "%{$id}%"],['user_id','=', auth()->user()->id]])->with('branch')->get();
 
+        if($customers->count() > 0){
+            return response()->json(['data' => $customers, 'status' => 'success', 'message' => 'Customer(s) retrieved successfully']);
+        }else{
+            return response()->json(['data' => [], 'status' => 'error', 'message' => 'Customer retrieval failed']);
+        }
+    }
 }
