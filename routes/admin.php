@@ -31,6 +31,8 @@ Route::post('password/confirm', 'Auth\ConfirmPasswordController@confirm');
 
 Route::get('branches', [App\Http\Controllers\Admin\HomeController::class, 'branches'])->name('branches');
 Route::post('branches', [App\Http\Controllers\Admin\HomeController::class, 'addBranch'])->name('branch.store');
+Route::post('branch/edit', [App\Http\Controllers\Admin\HomeController::class, 'editBranch'])->name('branch.edit');
+Route::post('branch/delete', [App\Http\Controllers\Admin\HomeController::class, 'deleteBranch'])->name('branch.delete');
 
 Route::get('managers', [App\Http\Controllers\Admin\HomeController::class, 'managers'])->name('managers');
 Route::get('manager/add', [App\Http\Controllers\Admin\HomeController::class, 'addManager'])->name('manager.create');

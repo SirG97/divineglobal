@@ -71,6 +71,31 @@ class HomeController extends Controller
         return back()->with('success', 'Branch created successfully');
     }
 
+    public function editBranch(Request $request){
+        $request->validate([
+            'id' => 'required',
+            'name' => 'required|string',
+            'address' => 'nullable|string'
+        ]);
+
+        Branch::where('id', $request->id)->update([
+            'name' =>  $request->name,
+            'address' => $request->address
+        ]);
+
+        return back()->with('success', 'Branch updated successfully');
+    }
+
+    public function deleteBranch(Request $request){
+        $request->validate([
+            'id' => 'required',
+        ]);
+
+        Branch::where('id', $request->id)->delete();
+
+        return back()->with('success', 'Branch deleted successfully');
+    }
+
     public function managers(){
         $managers = Manager::all();
         return view('admin.managers', compact('managers'));

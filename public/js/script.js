@@ -223,30 +223,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         Edit coin
     */
 
-    $('#editCoin').on('show.bs.modal', function (event) {
+    $('#editBranch').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
         let id = button.data('id'); // Extract info from data-* attributes
         let name = button.data('name'); // Extract info from data-* attributes
-        let coin_id = button.data('coin_id'); // Extract info from data-* attributes
         let address = button.data('address'); // Extract info from data-* attributes
-        let status = button.data('status'); // Extract info from data-* attributes
         let modal = $(this);
         // modal.find('#blockUserForm').attr("action", form_action);
         modal.find('#id').val(id);
-        modal.find('#coin_id').val(coin_id);
         modal.find('#name').val(name);
         modal.find('#address').val(address);
-        if(parseInt(status) === 1){
-            modal.find('#exampleRadios1').prop("checked", true);
-        }else{
-            modal.find('#exampleRadios2').prop("checked", true);
-        }
 
     });
 
-    $('#editCoinBtn').on('click', (e)=>{
+    $('#editBranchBtn').on('click', (e)=>{
         e.preventDefault();
-        $("#editCoinForm").trigger('submit');
+        $("#editBranchForm").trigger('submit');
     });
 
     /*
@@ -256,7 +248,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     /*
         Delete Coin
      */
-    $('#deleteCoin').on('show.bs.modal', function (event) {
+    $('#deleteBranch').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
         let delid = button.data('delid'); // Extract info from data-* attributes
 
@@ -266,9 +258,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     });
 
-    $('#deleteCoinBtn').on('click', (e)=>{
+    $('#deleteBranchBtn').on('click', (e)=>{
         e.preventDefault();
-        $("#deleteCoinForm").trigger('submit');
+        $("#deleteBranchForm").trigger('submit');
     });
 
     /*

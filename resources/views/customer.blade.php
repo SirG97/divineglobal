@@ -42,14 +42,14 @@
                     </div>
                     </div>
                     <div class="card-body">
-                        <form class="form-horizontal form-material" action="">
+                        <form class="form-horizontal form-material" method="POST" action="{{ route('user.update') }}">
                             @csrf
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">First Name</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Johnathan Doe" name="first_name"
                                            value="{{ $user->first_name }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -57,7 +57,7 @@
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Johnathan Doe" name="last_name"
                                            value="{{ $user->surname }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
                             <div class="form-group mb-4">

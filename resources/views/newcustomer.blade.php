@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
-                                        <label for="first_name" class="col-sm-12">First name</label>
+                                        <label for="first_name" class="col-sm-12">First name<span class="text-danger">*</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="first_name"
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
-                                        <label for="surname" class="col-sm-12">Surname</label>
+                                        <label for="surname" class="col-sm-12">Surname<span class="text-danger">*</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="surname"
@@ -93,7 +93,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group mb-4">
-                                        <label for="resident_address" class="col-sm-12">Address</label>
+                                        <label for="resident_address" class="col-sm-12">Address<span class="text-danger">*</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="resident_address"
@@ -120,14 +120,14 @@
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="office_address"
-                                                   id="office_address" required>
+                                                   id="office_address">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-5">
                                     <div class="form-group mb-4">
-                                        <label for="phone" class="col-sm-12">Phone</label>
+                                        <label for="phone" class="col-sm-12">Phone<span class="text-danger">*</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="phone"
@@ -289,11 +289,11 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     <div class="form-group mb-4">
-                                        <label for="daily_amount" class="col-sm-12">Daily amount</label>
+                                        <label for="daily_amount" class="col-sm-12">Daily amount<span class="text-danger">*</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text"
                                                    class="form-control p-0 border-0" placeholder="#1000" name="daily_amount"
-                                                   id="daily_amount"
+                                                   id="daily_amount" required
                                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 
                                         </div>

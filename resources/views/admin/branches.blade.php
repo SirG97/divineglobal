@@ -61,7 +61,7 @@
                                 <th class="border-top-0">Branch name</th>
                                 <th class="border-top-0">Address</th>
                                 <th class="border-top-0">Edit</th>
-{{--                                <th class="border-top-0">Delete</th>--}}
+                                <th class="border-top-0">Delete</th>
 
                             </tr>
                             </thead>
@@ -81,6 +81,14 @@
                                                     data-name="{{ $branch['name'] }}"
                                                     data-address="{{ $branch['address'] }}"
                                                     data-id="{{ $branch['id'] }}">Edit</button>
+                                        </td>
+
+                                        <td>
+                                            <button class="btn btn-sm btn-danger text-white"
+                                                    title="Delete"
+                                                    data-toggle="modal"
+                                                    data-target="#deleteBranch"
+                                                    data-delid="{{ $branch['id'] }}">Delete</button>
                                         </td>
 
                                     </tr>
@@ -103,7 +111,7 @@
     <div id="editBranch" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="editBranchForm" action="" method="POST">
+                <form id="editBranchForm" action="{{ route('admin.branch.edit') }}" method="POST">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
                             Edit branch
@@ -155,20 +163,22 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-    <div id="deleteCoin" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+    <div id="deleteBranch" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="" id="deleteCoinForm" method="POST">
+                <form id="deleteBranchForm" method="POST" action="{{ route('admin.branch.delete') }}">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Delete Coin
+                            Delete Branch
                         </h4>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         @csrf
                         <input type="hidden" value="" id="delid" name="id">
-                        <p>Are you sure you want to delete this coin?</p>
+                        <p class="text-danger">Please beware that deleting a branch will result in deleting all associated data including
+                            customers, marketers, payment and manager. Only delete a branch if it is created in error
+                            and has not been used by anybody. Are you sure you want to delete</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="
@@ -183,7 +193,7 @@
                                   font-weight-medium
                                   text-white
                                   waves-effect">
-                            Delete Coin
+                            Delete Branch
                         </button>
                     </div>
                 </form>
@@ -192,4 +202,5 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+
 @endsection
