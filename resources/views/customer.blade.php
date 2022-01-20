@@ -42,22 +42,23 @@
                     </div>
                     </div>
                     <div class="card-body">
-                        <form class="form-horizontal form-material" method="POST" action="{{ route('user.update') }}">
+                        <form class="form-horizontal form-material" method="POST" action="{{ route('edit') }}">
                             @csrf
                             <div class="form-group mb-4">
+                                <input type="hidden" name="id" value="{{ $user->id }}">
                                 <label class="col-md-12 p-0">First Name</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Johnathan Doe" name="first_name"
                                            value="{{ $user->first_name }}"
-                                           class="form-control p-0 border-0">
+                                           class="form-control p-0 border-0" required>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Last Name</label>
                                 <div class="col-md-12 border-bottom p-0">
-                                    <input type="text" placeholder="Johnathan Doe" name="last_name"
+                                    <input type="text" placeholder="Johnathan Doe" name="surname"
                                            value="{{ $user->surname }}"
-                                           class="form-control p-0 border-0">
+                                           class="form-control p-0 border-0" required>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -65,7 +66,7 @@
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Johnathan Doe" name="middle_name"
                                            value="{{ $user->middle_name }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -73,7 +74,7 @@
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="07047387890" name="phone"
                                            value="{{ $user->phone }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0" required>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -81,7 +82,18 @@
                                 <div class="col-md-12 border-bottom p-0" >
                                     <input type="date"  name="dob"
                                            value="{{ $user->dob }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="col-md-12 p-0">Sex</label>
+                                <div class="col-md-12 border-bottom p-0" >
+                                    <select id="sex"  name="sex"
+
+                                           class="form-control p-0 border-0">
+                                        <option value="Male" {{ $user->sex == 'male'? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ $user->sex == 'female'? 'selected' : '' }}>Female</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -89,7 +101,7 @@
                                 <div class="col-md-12 border-bottom p-0" >
                                     <input type="text"  name="resident_state"
                                            value="{{ $user->resident_state }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
 
@@ -98,16 +110,16 @@
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text"  name="resident_lga"
                                            value="{{ $user->resident_lga }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
 
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Residence address</label>
                                 <div class="col-md-12 border-bottom p-0" >
-                                    <input type="text"  name="resident_lga"
+                                    <input type="text"  name="resident_address"
                                            value="{{ $user->resident_address }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0" >
                                 </div>
                             </div>
 
@@ -125,7 +137,7 @@
                                 <div class="col-md-12 border-bottom p-0" >
                                     <input type="text"  name="office_address"
                                            value="{{ $user->office_address }}"
-                                           class="form-control p-0 border-0" >
+                                           class="form-control p-0 border-0" required>
                                 </div>
                             </div>
 
@@ -169,7 +181,7 @@
                                 <div class="col-md-12 border-bottom p-0" >
                                     <input type="text"  name="relationship"
                                            value="{{ $user->relationship }}"
-                                           class="form-control p-0 border-0" readonly>
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
 
@@ -185,9 +197,9 @@
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Daily amount</label>
                                 <div class="col-md-12 border-bottom p-0" >
-                                    <input type="text"  name="office_address"
+                                    <input type="text"  name="daily_amount"
                                            value="{{ $user->initial_unit }}"
-                                           class="form-control p-0 border-0">
+                                           class="form-control p-0 border-0" required>
                                 </div>
                             </div>
 
@@ -214,7 +226,7 @@
                                     <input type="text"
                                            name="account_number" id="account_number"
                                            class="form-control p-0 border-0"
-                                           value="{{ $user->account_number }}" readonly>
+                                           value="{{ $user->account_number }}">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -222,13 +234,11 @@
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text"
                                            class="form-control p-0 border-0"
-                                           name="account_name" id="account_name" value="{{ $user->account_name }}" readonly>
+                                           name="account_name" id="account_name" value="{{ $user->account_name }}">
                                 </div>
                             </div>
+                            <button type="submit" class="btn btn-success text-white">Update Customer details</button>
                         </form>
-                    </div>
-                    <div class="card-footer">
-{{--                        <a class="btn btn-primary" href="{{ route('admin.user.transactions', $user->id) }}">User transactions</a>--}}
                     </div>
 
                 </div>

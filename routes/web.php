@@ -26,7 +26,7 @@ Auth::routes();
 
     Route::get('/customer/create', [App\Http\Controllers\CustomerController::class, 'create'])->name('create');
     Route::post('/customer/store', [App\Http\Controllers\CustomerController::class, 'store'])->name('store');
-    Route::get('/customer/edit', [App\Http\Controllers\CustomerController::class, 'edit'])->name('edit');
+    Route::post('/customer/edit', [App\Http\Controllers\CustomerController::class, 'edit'])->name('edit');
     Route::get('/customer/{id}', [App\Http\Controllers\CustomerController::class, 'show'])->name('show');
     Route::get('/customers/{id}/search', [App\Http\Controllers\CustomerController::class, 'search'])->name('search');
     Route::get('/customer/{id}/history', [App\Http\Controllers\CustomerController::class, 'customerHistory'])->name('customer.history');

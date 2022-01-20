@@ -108,11 +108,11 @@ class CustomerController extends Controller
             'resident_lga' => 'nullable',
             'resident_address' => 'nullable',
             'occupation' => 'nullable',
-            'office_address' => 'nullable',
+            'office_address' => 'required',
             'state' => 'nullable',
             'lga' => 'nullable',
             'hometown' => 'nullable',
-            'phone' => 'nullable',
+            'phone' => 'required',
             'next_of_kin'  => 'nullable',
             'relationship' => 'nullable',
             'nokphone' => 'nullable',
@@ -199,8 +199,68 @@ class CustomerController extends Controller
         return view('customer', compact('user', 'banks', 'balance'));
     }
 
-    public function edit(){
+    public function edit(Request $request){
+        $request->validate([
+            'first_name' => 'required|string|max:200',
+            'surname' => 'required|string|max:200',
+            'middle_name' => 'string|nullable',
+            'dob' => 'nullable',
+            'sex' => 'nullable',
+            'resident_state' => 'nullable',
+            'resident_lga' => 'nullable',
+            'resident_address' => 'nullable',
+            'occupation' => 'nullable',
+            'office_address' => 'required',
+            'state' => 'nullable',
+            'lga' => 'nullable',
+            'hometown' => 'nullable',
+            'phone' => 'required',
+            'next_of_kin'  => 'nullable',
+            'relationship' => 'nullable',
+            'nokphone' => 'nullable',
+            'acc_no'  => 'nullable',
+            'branch' => 'nullable',
+            'group' => 'nullable',
+            'sb_card_no_from' => 'nullable',
+            'sb_card_no_to' => 'nullable',
+            'sb' => 'nullable',
+            'initial_unit'  => 'nullable',
+            'bank_name' => 'nullable',
+            'bank_code' => 'nullable',
+            'account_name' => 'nullable',
+            'account_number' => 'nullable',
+            'daily_amount' => 'required'
+        ]);
 
+
+        Customer::where('id', $request->id)->update([
+            'first_name' => $request->first_name,
+            'surname' => $request->surname,
+            'middle_name' => $request->middle_name,
+            'dob' => $request->dob,
+            'sex' => $request->sex,
+            'resident_state' => $request->resident_state,
+            'resident_lga' => $request->resident_lga,
+            'resident_address' => $request->resident_address,
+            'occupation' => $request->occupation,
+            'office_address' => $request->office_address,
+            'state' => $request->state,
+            'lga' => $request->lga,
+            'hometown' => $request->hometown,
+            'phone' => $request->phone,
+            'next_of_kin'  => $request->next_of_kin,
+            'relationship' => $request->relationship,
+            'nokphone' => $request->nokphone,
+            'user_id' => auth()->user()->id,
+            'branch_id' => auth()->user()->branch_id,
+            'bank_name' => $request->bank_name,
+            'bank_code' => $request->bank_code,
+            'account_name' => $request->account_name,
+            'account_number' => $request->account_number,
+            'initial_unit' => $request->daily_amount
+        ]);
+
+        return back()->with('success', 'Customer details updated successfully');
     }
 
     public function update(){

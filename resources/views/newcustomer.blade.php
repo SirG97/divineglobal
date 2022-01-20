@@ -12,11 +12,12 @@
                 <div class="card">
                     <div class="card-body">
                         <form class="form-horizontal form-material" method="POST" action="{{ route('store') }}">
+                            <p>Fields marked asterisks(<span class="text-danger">*</span>) are required</p>
                             @csrf
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
-                                        <label for="first_name" class="col-sm-12">First name<span class="text-danger">*</span></label>
+                                        <label for="first_name" class="col-sm-12">First name<span class="text-danger"> *</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="first_name"
@@ -26,7 +27,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group mb-4">
-                                        <label for="surname" class="col-sm-12">Surname<span class="text-danger">*</span></label>
+                                        <label for="surname" class="col-sm-12">Surname<span class="text-danger"> *</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="surname"
@@ -49,7 +50,7 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group mb-4">
-                                        <label for="sex" class="col-sm-12">Sex</label>
+                                        <label for="sex" class="col-sm-12">Sex <span class="text-danger"> *</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <select id="sex" name="sex"  class="form-select shadow-none p-0 border-0 form-control-line">
                                                 <option value="Male" selected="">Male</option>
@@ -93,11 +94,11 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group mb-4">
-                                        <label for="resident_address" class="col-sm-12">Address<span class="text-danger">*</span></label>
+                                        <label for="resident_address" class="col-sm-12">Address</label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="resident_address"
-                                                   id="resident_address" required>
+                                                   id="resident_address">
                                         </div>
                                     </div>
                                 </div>
@@ -116,18 +117,18 @@
                             <div class="row">
                                 <div class="col-sm-7">
                                     <div class="form-group mb-4">
-                                        <label for="office_address" class="col-sm-12">Office Address</label>
+                                        <label for="office_address" class="col-sm-12">Office Address<span class="text-danger"> *</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="office_address"
-                                                   id="office_address">
+                                                   id="office_address" required>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-5">
                                     <div class="form-group mb-4">
-                                        <label for="phone" class="col-sm-12">Phone<span class="text-danger">*</span></label>
+                                        <label for="phone" class="col-sm-12">Phone<span class="text-danger"> *</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text" placeholder=""
                                                    class="form-control p-0 border-0" name="phone"
@@ -289,7 +290,7 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     <div class="form-group mb-4">
-                                        <label for="daily_amount" class="col-sm-12">Daily amount<span class="text-danger">*</span></label>
+                                        <label for="daily_amount" class="col-sm-12">Daily amount<span class="text-danger"> *</span></label>
                                         <div class="col-md-12 border-bottom p-0">
                                             <input type="text"
                                                    class="form-control p-0 border-0" placeholder="#1000" name="daily_amount"
