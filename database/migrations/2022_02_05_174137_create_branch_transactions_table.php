@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionsTable extends Migration
+class CreateBranchTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('branch_transactions', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->string('user_type');
@@ -22,12 +22,12 @@ class CreateTransactionsTable extends Migration
             $table->string('txn_ref');
             $table->enum('txn_type', ['credit','debit']);
             $table->enum('option', ['cash','bank']);
-            $table->enum('purpose', ['deposit', 'transfer', 'withdrawal', 'reversal', 'commission', 'logistics', 'loan']);
+            $table->enum('purpose', ['deposit', 'transfer', 'withdrawal','logistics', 'reversal', 'commission']);
             $table->unsignedFloat('amount', 20, 2);
             $table->unsignedFloat('balance_before', 20, 2);
             $table->unsignedFloat('balance_after', 20, 2);
             $table->string('description');
-            $table->string('remark')->nullable();
+            $table->string('date');
             $table->timestamps();
         });
     }
@@ -39,6 +39,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('branch_transactions');
     }
 }

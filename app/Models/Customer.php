@@ -15,6 +15,7 @@ class Customer extends Model
         'middle_name',
         'dob',
         'sex',
+        'account_id',
         'resident_state',
         'resident_lga',
         'resident_address',

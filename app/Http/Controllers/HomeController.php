@@ -32,20 +32,21 @@ class HomeController extends Controller
     public function index()
     {
         $totalCustomers = Customer::where('user_id', auth()->user()->id)->count();
-        $yearlyTotal = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
+        $yearlyCredit = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $monthlyTotal = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth(),
+        $yearlyDebit = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'debit']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $dailyTotal = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
-            Carbon::now()->startOfDay(),
-            Carbon::now()->endOfDay()
+        $commission = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'debit'],['purpose', '=', 'commission']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear()
         ])->sum('amount');
         $transactions = Transaction::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->take(30)->get();
-        return view('home', compact('totalCustomers','yearlyTotal', 'monthlyTotal', 'dailyTotal', 'transactions'));
+        $balance = $yearlyCredit - $yearlyDebit;
+        return view('home', compact('totalCustomers','balance', 'yearlyCredit', 'yearlyDebit', 'transactions', 'commission'));
     }
 
     public function password(){

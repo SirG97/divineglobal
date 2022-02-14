@@ -36,6 +36,15 @@ Route::post('marketer/store', [App\Http\Controllers\Manager\HomeController::clas
 Route::get('/customers', [App\Http\Controllers\Manager\HomeController::class, 'customers'])->name('customers');
 Route::get('/daily', [App\Http\Controllers\Manager\HomeController::class, 'daily'])->name('daily');
 Route::get('/history', [App\Http\Controllers\Manager\HomeController::class, 'history'])->name('history');
+Route::get('/record', [App\Http\Controllers\Manager\HomeController::class, 'recordExpenditure'])->name('expenditure.create');
+Route::post('/record', [App\Http\Controllers\Manager\HomeController::class, 'saveExpenditure'])->name('expenditure.store');
+Route::get('/loan/apply', [App\Http\Controllers\Manager\HomeController::class, 'getLoan'])->name('loan.create');
+Route::post('/loan/apply', [App\Http\Controllers\Manager\HomeController::class, 'applyForLoan'])->name('loan.store');
+Route::get('/loan/repay', [App\Http\Controllers\Manager\HomeController::class, 'repayLoan'])->name('loan.repay');
+Route::post('/loan/repay', [App\Http\Controllers\Manager\HomeController::class, 'storeLoanRepayment'])->name('loan.repay.store');
+Route::get('/loan/requests', [App\Http\Controllers\Manager\HomeController::class, 'getLoanRequests'])->name('loan.requests');
+Route::post('/loan/approve', [App\Http\Controllers\Manager\HomeController::class, 'approveLoan'])->name('loan.approve');
+Route::post('/loan/reject', [App\Http\Controllers\Manager\HomeController::class, 'rejectLoan'])->name('loan.reject');
 Route::get('/customer/{id}', [App\Http\Controllers\Manager\HomeController::class, 'show'])->name('show');
 Route::get('/customer/{id}/history', [App\Http\Controllers\Manager\HomeController::class, 'customerHistory'])->name('customer.history');
 Route::get('/password', [App\Http\Controllers\Manager\HomeController::class, 'password'])->name('password');

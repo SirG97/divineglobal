@@ -175,8 +175,36 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.daily') }}"
                            aria-expanded="false">
-                            <i class="fa fa-handshake" aria-hidden="true"></i>
+                            <i class="fa fa-capsules" aria-hidden="true"></i>
                             <span class="hide-menu">Daily savings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.expenditure.create') }}"
+                           aria-expanded="false">
+                            <i class="fa fa-chart-line" aria-hidden="true"></i>
+                            <span class="hide-menu">Record Transaction</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.loan.create') }}"
+                           aria-expanded="false">
+                            <i class="fa fa-microchip" aria-hidden="true"></i>
+                            <span class="hide-menu">Get Loan</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.loan.repay') }}"
+                           aria-expanded="false">
+                            <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                            <span class="hide-menu">Repay loan</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.loan.requests') }}"
+                           aria-expanded="false">
+                            <i class="fa fa-truck-loading" aria-hidden="true"></i>
+                            <span class="hide-menu">Loan Request</span>
                         </a>
                     </li>
                     <li class="sidebar-item">

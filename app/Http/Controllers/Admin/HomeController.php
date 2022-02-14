@@ -63,9 +63,13 @@ class HomeController extends Controller
             'address' => 'nullable|string'
         ]);
 
-        Branch::create([
+        $branch = Branch::create([
             'name' =>  $request->name,
             'address' => $request->address
+        ]);
+
+        Wallet::create(['customer_id' => $branch->id,
+                        'balance' => 0,
         ]);
 
         return back()->with('success', 'Branch created successfully');
@@ -92,7 +96,10 @@ class HomeController extends Controller
         ]);
 
         Branch::where('id', $request->id)->delete();
-
+        Wallet::where([['user_type', '=', 'branch'], ['customer_id', $request->id]])->delete();
+        Transaction::where('branch_id', $request->id)->delete();
+        User::where('branch_id', $request->id)->delete();
+        Manager::where('branch_id', $request->id)->delete();
         return back()->with('success', 'Branch deleted successfully');
     }
 

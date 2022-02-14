@@ -53,28 +53,42 @@
                                 </div>
                             </div>
                             <div class="form-group mb-4">
-                                <label class="col-md-12 p-0">Address</label>
+                                <label class="col-md-12 p-0">Account number</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text"
                                            name="account_number" id="account_number"
                                            class="form-control p-0 border-0"
-                                           value="{{ $user->resident_address }}" readonly>
+                                           value="{{ $user->account_id }}" readonly>
                                 </div>
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="col-md-12 p-0">Daily amount(₦)</label>
-                                <div class="col-md-12 border-bottom p-0" >
-                                    <input type="text"  name="daily_amount"
-                                           value="{{ $user->initial_unit }}"
-                                           class="form-control p-0 border-0">
-                                </div>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label class="col-md-12 p-0">Date</label>
-                                <div class="col-md-12 border-bottom p-0" >
-                                    <input type="date"  name="date"
 
-                                           class="form-control p-0 border-0">
+                            <div class="form-group mb-4">
+                                <label for="amount" class="col-md-12 p-0">Amount</label>
+                                <div class="col-md-12 border-bottom p-0">
+                                    <input type="text" placeholder="₦150000" class="form-control p-0 border-0" name="amount" id="amount" autocomplete="off"
+                                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="option" class="col-md-12 p-0">Deposit option</label>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="switch">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="option" id="option" value="cash" checked>
+                                            <label class="form-check-label" for="inlineRadio1">Cash</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="option" id="option" value="bank" >
+                                            <label class="form-check-label" for="inlineRadio2">Bank</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="col-md-12 p-0">Remark (optional)</label>
+                                <div class="col-md-12 border-bottom p-0">
+                                    <textarea rows="5" class="form-control p-0 border-0" name="remark"></textarea>
                                 </div>
                             </div>
                             <div class="col-sm-12 d-flex justify-content-end">

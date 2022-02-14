@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BranchWallet;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\Wallet;
@@ -23,7 +24,7 @@ class CustomerController extends Controller
     }
 
     public function index(){
-        $users = Customer::where('user_id', auth()->user()->id)->simplePaginate(50);
+        $users = Customer::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->simplePaginate(50);
 
         return view('customers', compact('users'));
     }
@@ -127,10 +128,11 @@ class CustomerController extends Controller
             'bank_code' => 'nullable',
             'account_name' => 'nullable',
             'account_number' => 'nullable',
-            'daily_amount' => 'required'
+            'daily_amount' => 'nullable'
         ]);
 
         $customer = Customer::create([
+            'account_id' => $this->generateAccountId(),
             'first_name' => $request->first_name,
             'surname' => $request->surname,
             'middle_name' => $request->middle_name,
@@ -154,43 +156,75 @@ class CustomerController extends Controller
             'bank_code' => $request->bank_code,
             'account_name' => $request->account_name,
             'account_number' => $request->account_number,
-            'initial_unit' => $request->daily_amount
+            'initial_unit' => 0
         ]);
 
         Wallet::create([
             'customer_id' => $customer->id,
             'balance' => 0
         ]);
-        return back()->with('success', 'Customer created successfully');
+        return redirect(route('index'))->with('success', 'Customer created successfully');
+    }
+
+    public function generateAccountId(){
+        $digits_needed=8;
+
+        $random_number=''; // set up a blank string
+
+        $count=0;
+
+        while ( $count < $digits_needed ) {
+            $random_digit = mt_rand(0, 9);
+
+            $random_number .= $random_digit;
+            $count++;
+        }
+
+        $permitted_string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $length = 2;
+        $input_length = strlen($permitted_string);
+        $random_string = '';
+        for($i = 0; $i < $length; $i++) {
+            $random_character = $permitted_string[mt_rand(0, $input_length - 1)];
+            $random_string .= $random_character;
+        }
+        $account_id = $random_number . $random_string;
+
+        $customer = Customer::where('account_id', $account_id)->first();
+        if($customer){
+            $this->generateAccountId();
+        }
+
+        return $account_id;
     }
 
     public function show($id){
         $banks = [];
-//        $curl = curl_init();
-//
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => "https://api.flutterwave.com/v3/banks/NG",
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => "",
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 0,
-//            CURLOPT_FOLLOWLOCATION => true,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => "GET",
-//            CURLOPT_HTTPHEADER => array(
-//                "Authorization: Bearer " . config('app.FLUTTERWAVE_SECRET')
-//            ),
-//        ));
-//
-//        $banks = curl_exec($curl);
-//        $banks = json_decode($banks);
-//        if($banks->status == 'success'){
-//            usort($banks->data, function($a, $b){ return strcmp($a->name, $b->name); });
-//        }else{
-//            $banks = [];
-//        }
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.flutterwave.com/v3/banks/NG",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: Bearer " . config('app.FLUTTERWAVE_SECRET')
+            ),
+        ));
+
+        $banks = curl_exec($curl);
+        $banks = json_decode($banks);
+        if($banks !== null and $banks->status == 'success'){
+            usort($banks->data, function($a, $b){ return strcmp($a->name, $b->name); });
+        }else{
+            $banks = [];
+        }
         $user = Customer::findOrFail($id);
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
@@ -269,7 +303,7 @@ class CustomerController extends Controller
 
     public function save($id){
         $user = Customer::findOrFail($id);
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
@@ -278,83 +312,51 @@ class CustomerController extends Controller
     }
 
     public function mark(Request $request){
+
         $request->validate([
             'id' => 'required|numeric',
-            'daily_amount' => 'required|numeric',
-            'date' => 'date|required'
+            'amount' => 'required|numeric',
+            'remark' => 'nullable|string'
         ]);
         // Retrieve the customer
         $customer = Customer::findOrFail($request->id);
         // Get the customer wallet
-        $customerWallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $request->id]])->first();
+        $customerWallet = Wallet::where([['customer_id', '=', $request->id]])->first();
         if(!$customerWallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
-        // Check if the amount that is being deposited is same with the one in customer data
-        if($customer->initial_unit > $request->daily_amount){
-            return back()->with('error', 'The amount to be saved is less than the customers agreed payment amount.');
-        }
+
         $balance = $customerWallet->balance;
-        $count = $customerWallet->count;
-        if($count < 30){
-            Transaction::create([
-                'user_id' => auth()->user()->id,
-                'branch_id' => auth()->user()->branch_id,
-                'customer_id' => $customer->id,
-                'txn_ref' => Str::random(10),
-                'txn_type' => 'credit',
-                'purpose' => 'deposit',
-                'amount' => $request->daily_amount,
-                'balance_before' => $balance,
-                'balance_after' => $balance + $request->daily_amount,
-                'description' => 'Deposit from ' . $customer->first_name . ' ' . $customer->surname . ' by ' . auth()->user()->name,
-                'count' => $count + 1,
-                'date' => Carbon::now(),
-            ]);
-            $customerWallet->balance = $balance + $request->daily_amount;
-            $customerWallet->count = $count + 1;
-            $customerWallet->save();
+
+        Transaction::create([
+            'user_id' => auth()->user()->id,
+            'branch_id' => auth()->user()->branch_id,
+            'customer_id' => $customer->id,
+            'txn_ref' => Str::random(10),
+            'user_type' => 'user',
+            'txn_type' => 'credit',
+            'purpose' => 'deposit',
+            'option' => $request->option,
+            'amount' => $request->amount,
+            'balance_before' => $balance,
+            'balance_after' => $balance + $request->amount,
+            'description' => 'Deposit from ' . $customer->first_name . ' ' . $customer->surname . ' by ' . auth()->user()->name,
+            'remark' => $request->remark
+        ]);
+
+
+        $customerWallet->balance = $balance + $request->amount;
+        $customerWallet->save();
+
+        if($request->option === 'bank'){
+            BranchWallet::updateOrCreate(['branch_id' => auth()->user()->branch_id],
+                                        ['balance' => DB::raw('balance +'. $request->amount),
+                                            'bank' => DB::raw('bank +'. $request->amount),
+                                        ]);
         }else{
-           $t = Transaction::create([
-                'user_id' => auth()->user()->id,
-                'branch_id' => auth()->user()->branch_id,
-                'customer_id' => $customer->id,
-                'txn_ref' => Str::random(10),
-                'txn_type' => 'credit',
-                'purpose' => 'deposit',
-                'amount' => $request->daily_amount,
-                'balance_before' => $balance,
-                'balance_after' => $balance + $request->daily_amount,
-                'description' => 'Deposit from ' . $customer->first_name . ' ' . $customer->surname . ' by ' . auth()->user()->name,
-                'count' => 0,
-                'date' => Carbon::now(),
-            ]);
-            $customerWallet->balance = $balance + $request->daily_amount;
-            $customerWallet->count = 0;
-            $customerWallet->save();
-            // Debit the service charge
-            Transaction::create([
-                'user_id' => auth()->user()->id,
-                'branch_id' => auth()->user()->branch_id,
-                'customer_id' => $customer->id,
-                'txn_ref' => Str::random(10),
-                'txn_type' => 'debit',
-                'purpose' => 'payment',
-                'amount' => $request->daily_amount,
-                'balance_before' => $customerWallet->balance,
-                'balance_after' => $customerWallet->balance - $request->daily_amount,
-                'description' => 'Service charge from ' . $customer->first_name . ' ' . $customer->surname . ' by ' . auth()->user()->name,
-                'count' => 0,
-                'date' => Carbon::now(),
-            ]);
-
-            $customerWallet->balance = $customerWallet->balance - $request->daily_amount;
-            $customerWallet->save();
-
-            // Update admin wallet
-            Wallet::updateOrCreate(['user_type' => 'user', 'customer_id' => auth()->user()->id],
-                                    ['balance' => DB::raw('balance+'. $request->daily_amount)]);
-
+            BranchWallet::updateOrCreate(['branch_id' => auth()->user()->branch_id],
+                                        ['balance' => DB::raw('balance +'. $request->amount),
+                                         'cash' => DB::raw('cash +'. $request->amount)]);
         }
 
         return back()->with('success', 'Customer\'s payment saved successfully');
@@ -362,7 +364,7 @@ class CustomerController extends Controller
 
     public function withdraw($id){
         $user = Customer::findOrFail($id);
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
@@ -374,30 +376,88 @@ class CustomerController extends Controller
         $request->validate([
             'id' => 'required|numeric',
             'amount' => 'required|numeric',
+            'charges' => 'nullable|numeric',
         ]);
         $customer = Customer::findOrFail($request->id);
-        $customerWallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $request->id]])->first();
+        $customerWallet = Wallet::where([['customer_id', '=', $request->id]])->first();
         if(!$customerWallet){
-            return back()->with('error', 'Could not retrieve customer wallet');
+            return back()->with('error', 'Customer wallet not found');
         }
 
-        Transaction::create([
+        if($request->amount < 1){
+            return back()->with('error', 'Withdrawal amount is too small');
+        }
+
+        if($request->charges == null or $request->charges < 1){
+            $request->charges = 0;
+        }
+        $totalAmount = $request->amount + $request->charges;
+        if($totalAmount > $customerWallet->balance){
+            return back()->with('error', 'Total amount to be withdrawn is more than the customer\'s balance');
+        }
+
+        $branchWallet = BranchWallet::where('branch_id', auth()->user()->branch_id)->first();
+        $cashBalance = $branchWallet->cash;
+        $bankBalance = $branchWallet->bank;
+
+        if($request->option === 'cash' and $totalAmount > $cashBalance ){
+            return back()->with('error', 'Total amount to be withdrawn is more than the branch\'s cash balance. Use another withdrawal option or contact manager');
+        }
+        if($request->option === 'bank' and $totalAmount > $bankBalance ){
+            return back()->with('error', 'Total amount to be withdrawn is more than the customer\'s bank balance. Use another withdrawal option or contact manager');
+        }
+
+
+        $t = Transaction::create([
             'user_id' => auth()->user()->id,
             'branch_id' => auth()->user()->branch_id,
             'customer_id' => $customer->id,
             'txn_ref' => Str::random(10),
             'txn_type' => 'debit',
+            'user_type' => 'user',
             'purpose' => 'withdrawal',
+            'option' => $request->option,
             'amount' => $request->amount,
             'balance_before' => $customerWallet->balance,
             'balance_after' => $customerWallet->balance - $request->amount,
             'description' => 'Withdrawal for ' . $customer->first_name . ' ' . $customer->surname . ' by ' . auth()->user()->name,
-            'count' => 0,
-            'date' => Carbon::now(),
+            'remark' => $request->remark,
         ]);
 
         $customerWallet->balance = $customerWallet->balance - $request->amount;
         $customerWallet->save();
+
+        if($request->option === 'bank'){
+            BranchWallet::updateOrCreate(['branch_id' => auth()->user()->branch_id],
+                ['balance' => DB::raw('balance -'. $request->amount),
+                    'bank' => DB::raw('bank -'. $request->amount),
+                    ]);
+        }else{
+            BranchWallet::updateOrCreate(['branch_id' => auth()->user()->branch_id],
+                ['balance' => DB::raw('balance -'. $request->amount),
+                 'cash' => DB::raw('cash -'. $request->amount)]);
+        }
+        if($request->charges > 0){
+            Transaction::create([
+                'user_id' => auth()->user()->id,
+                'branch_id' => auth()->user()->branch_id,
+                'customer_id' => $customer->id,
+                'txn_ref' => Str::random(10),
+                'txn_type' => 'debit',
+                'user_type' => 'user',
+                'purpose' => 'commission',
+                'option' => $request->option,
+                'amount' => $request->charges,
+                'balance_before' => $t->balance_after,
+                'balance_after' => $t->balance_after - $request->charges,
+                'description' => 'Commission from ' . $customer->first_name . ' ' . $customer->surname . '\'s withdrawal by ' . auth()->user()->name,
+                'remark' => $request->remark,
+            ]);
+
+            $customerWallet->balance = $customerWallet->balance - $request->charges;
+            $customerWallet->save();
+        }
+
 
         return redirect(route('show', $request->id))->with('success', 'Withdrawal successful');
     }
@@ -425,7 +485,7 @@ class CustomerController extends Controller
 
     public function customerHistory($id){
 
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
@@ -437,6 +497,7 @@ class CustomerController extends Controller
     public function search($id){
        $customers =  Customer::where([['first_name', 'LIKE', "%{$id}%"], ['user_id','=', auth()->user()->id]])
             ->orWhere([['surname', 'LIKE', "%{$id}%"],['user_id','=', auth()->user()->id]])
+            ->orWhere([['account_id', 'LIKE', "%{$id}%"],['user_id','=', auth()->user()->id]])
             ->orWhere([['phone', 'LIKE', "%{$id}%"],['user_id','=', auth()->user()->id]])->with('branch')->get();
 
         if($customers->count() > 0){

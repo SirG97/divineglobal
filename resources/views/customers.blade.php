@@ -46,6 +46,7 @@
                             <thead>
                             <tr>
                                 <th class="border-top-0">Name</th>
+                                <th class="border-top-0">Account&nbsp;number</th>
                                 <th class="border-top-0">Phone</th>
                                 <th class="border-top-0">Joined on</th>
                                 <th class="border-top-0">View</th>
@@ -56,6 +57,7 @@
                                 @foreach($users as $user)
                                     <tr>
                                         <td scope="row">{{ $user['first_name'] }} {{ $user['surname'] }}</td>
+                                        <td>{{ $user['account_id'] }}</td>
                                         <td>{{ $user['phone'] }}</td>
                                         <td>{{ $user['created_at']->diffForHumans() }}</td>
                                         <td>

@@ -223,22 +223,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         Edit coin
     */
 
-    $('#editBranch').on('show.bs.modal', function (event) {
+    $('#approveLoan').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
         let id = button.data('id'); // Extract info from data-* attributes
-        let name = button.data('name'); // Extract info from data-* attributes
+        let amount = button.data('amount'); // Extract info from data-* attributes
         let address = button.data('address'); // Extract info from data-* attributes
         let modal = $(this);
         // modal.find('#blockUserForm').attr("action", form_action);
         modal.find('#id').val(id);
-        modal.find('#name').val(name);
+        modal.find('#amount').val(amount);
         modal.find('#address').val(address);
 
     });
 
-    $('#editBranchBtn').on('click', (e)=>{
+    $('#approveLoanBtn').on('click', (e)=>{
         e.preventDefault();
-        $("#editBranchForm").trigger('submit');
+        $("#approveLoanForm").trigger('submit');
     });
 
     /*
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     /*
         Delete Coin
      */
-    $('#deleteBranch').on('show.bs.modal', function (event) {
+    $('#rejectLoan').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
         let delid = button.data('delid'); // Extract info from data-* attributes
 
@@ -258,9 +258,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     });
 
-    $('#deleteBranchBtn').on('click', (e)=>{
+    $('#rejectLoanBtn').on('click', (e)=>{
         e.preventDefault();
-        $("#deleteBranchForm").trigger('submit');
+        $("#rejectLoanForm").trigger('submit');
     });
 
     /*
