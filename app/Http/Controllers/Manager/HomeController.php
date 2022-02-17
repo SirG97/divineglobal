@@ -44,26 +44,11 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $yearlyDebit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'], ['purpose','=','withdrawal'],['purpose','!=','comm']])->whereBetween('created_at', [
+        $yearlyDebit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'], ['purpose','=','withdrawal'],['purpose','!=','commission']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-//        $yearly = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
-//            Carbon::now()->startOfMonth(),
-//            Carbon::now()->endOfMonth(),
-//        ])->sum('amount');
-//        $monthlyExpenditure = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit']])->whereBetween('created_at', [
-//            Carbon::now()->startOfMonth(),
-//            Carbon::now()->endOfMonth(),
-//        ])->sum('amount');
-//        $dailyTotal = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
-//            Carbon::now()->startOfDay(),
-//            Carbon::now()->endOfDay()
-//        ])->sum('amount');
-//        $dailyExpenditure = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit']])->whereBetween('created_at', [
-//            Carbon::now()->startOfDay(),
-//            Carbon::now()->endOfDay()
-//        ])->sum('amount');
+
         $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
         if(!$b){
             $balance = 0;
@@ -75,16 +60,16 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear()
         ])->sum('amount');
-        $loanPaid = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
+        $loanPaid = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear()
         ])->sum('amount');
 
-        $loan = 0;
+        $loan = $loanTaken - $loanPaid;
         $transactions = Transaction::where('branch_id', $branch)->orderBy('id', 'desc')->take(30)->get();
         return view('manager.home', compact('totalCustomers','yearlyCredit', 'yearlyDebit',
                                                     'transactions',
-                                                    'loan', 'balance'));
+                                                    'loan', 'balance', 'loanTaken', 'loanPaid'));
     }
 
     public function marketers(){
@@ -128,29 +113,7 @@ class HomeController extends Controller
 
     public function show($id){
         $banks = [];
-//        $curl = curl_init();
-//
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => "https://api.flutterwave.com/v3/banks/NG",
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => "",
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 0,
-//            CURLOPT_FOLLOWLOCATION => true,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => "GET",
-//            CURLOPT_HTTPHEADER => array(
-//                "Authorization: Bearer " . config('app.FLUTTERWAVE_SECRET')
-//            ),
-//        ));
-//
-//        $banks = curl_exec($curl);
-//        $banks = json_decode($banks);
-//        if($banks->status == 'success'){
-//            usort($banks->data, function($a, $b){ return strcmp($a->name, $b->name); });
-//        }else{
-//            $banks = [];
-//        }
+
         $user = Customer::findOrFail($id);
         $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
         if(!$wallet){
@@ -170,18 +133,45 @@ class HomeController extends Controller
         return view('manager.daily', compact('transactions', 'balance'));
     }
 
-    public function history(){
+    public function history(Request $request){
+
         $branch = auth('manager')->user()->branch_id;
-        $total = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
-            Carbon::now()->startOfYear(),
-            Carbon::now()->endOfYear(),
-        ])->sum('amount');
-        $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
-            Carbon::now()->startOfYear(),
-            Carbon::now()->endOfYear(),
-        ])->orderBy('id', 'desc')->simplePaginate(31);
-        $balance = $total;
-        return view('manager.history', compact('transactions', 'balance'));
+        $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
+        if(!$b){
+            $balance = 0;
+            $bank = 0;
+            $cash = 0;
+        }else{
+            $balance = $b->balance;
+            $bank = $b->bank;
+            $cash = $b->cash;
+        }
+
+        if($request->start !== null and $request->end !== null){
+//            dd($request->start, $request->end);
+            $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
+                $request->start,
+                $request->end,
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start !== null and $request->end == null){
+            $transactions = Transaction::where(['branch_id', $branch])->whereBetween('created_at', [
+                $request->start,
+                Carbon::now(),
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start == null and $request->end !== null){
+            $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
+                Carbon::now()->startOfYear(),
+                $request->end,
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start == null and $request->end == null){
+
+            $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
+                Carbon::now()->startOfYear(),
+                Carbon::now()->endOfYear(),
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }
+
+        return view('manager.history', compact('transactions', 'balance', 'cash', 'bank'));
     }
 
     public function customerHistory($id){
@@ -425,5 +415,9 @@ class HomeController extends Controller
 
     }
 
+    public function transaction($id){
+        $transaction = Transaction::where([['txn_ref', '=', $id]])->first();
 
+        return view('manager.transaction', compact('transaction'));
+    }
 }

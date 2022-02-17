@@ -116,15 +116,19 @@
                                 @foreach($transactions as $transaction)
                                     <tr style="margin-bottom: 2px;">
                                         <td class="{{ $transaction->txn_type == 'credit'?'left-border-success':'left-border-danger' }}">
-                                            <h5 class="font-weight-medium mb-0">
-                                                <span class="text-capitalize">{{ $transaction->description }}</span>
-                                            </h5>
-                                            <span class="text-muted">{{ $transaction->created_at->toDayDateTimeString() }}</span>
+                                            <a href="{{ route('transaction', ['id' => $transaction->txn_ref]) }}">
+                                                <h5 class="font-weight-medium mb-0">
+                                                    <span class="text-capitalize">{{ $transaction->description }}</span>
+                                                </h5>
+                                                <span class="text-muted">{{ $transaction->created_at->toDayDateTimeString() }}</span>
+                                            </a>
                                         </td>
                                         <td style="text-align: right;margin-right: 15px">
-                                        <span class="text-right {{ $transaction->txn_type == 'credit'?'text-success':'text-danger' }}">
-                                            {{ $transaction->txn_type == 'credit'?'+':'-' }}
-                                            ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
+                                            <a href="{{ route('transaction', ['id' => $transaction->txn_ref]) }}">
+                                                 <span class="text-right {{ $transaction->txn_type == 'credit'?'text-success':'text-danger' }}">
+                                                {{ $transaction->txn_type == 'credit'?'+':'-' }}
+                                                ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
+                                            </a>
                                         </td>
                                     </tr>
 

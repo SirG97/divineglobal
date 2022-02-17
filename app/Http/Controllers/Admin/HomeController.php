@@ -131,6 +131,19 @@ class HomeController extends Controller
         return back()->with('success', 'Manager added to preregistration list successfully');
     }
 
+    public function editWaitlistManager(Request $request){
+        $request->validate([
+            'id' => 'required',
+            'email' => 'required|string',
+        ]);
+
+        Waitlist::where('id', $request->id)->update([
+            'email' =>  $request->email,
+        ]);
+
+        return back()->with('success', 'Branch updated successfully');
+    }
+
     public function marketers(){
         $users = User::all();
 
@@ -198,6 +211,12 @@ class HomeController extends Controller
         ])->orderBy('id', 'desc')->simplePaginate(31);
         $balance = $total;
         return view('admin.history', compact('transactions', 'balance'));
+    }
+    public function transaction(){
+
+        $transaction = Transaction::where([['txn_type', '=', 'credit']])->first();
+
+        return view('admin.transaction', compact('transaction'));
     }
 
     public function customerHistory($id){

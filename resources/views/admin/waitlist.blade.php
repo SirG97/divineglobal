@@ -81,8 +81,8 @@
                                             <button class="btn btn-sm btn-warning"
                                                     title="Edit branch details"
                                                     data-toggle="modal"
-                                                    data-target="#editBranch"
-                                                    data-name="{{ $waitlist['name'] }}"
+                                                    data-target="#updatePreManager"
+                                                    data-email="{{ $waitlist['email'] }}"
                                                     data-id="{{ $waitlist['id'] }}">Edit</button>
                                         </td>
 
@@ -103,35 +103,25 @@
             </div>
         </div>
     </div>
-    <div id="editBranch" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+    <div id="updatePreManager" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="editBranchForm" action="" method="POST">
+                <form id="updatePreManagerForm" action="{{ route('admin.manager.edit') }}" method="POST">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Edit branch
+                            Update Email
                         </h4>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         @csrf
                         <div class="form-group mb-4">
-                            <label id="name" class="col-sm-12">Name</label>
+                            <label id="name" class="col-sm-12">Email</label>
                             <input type="hidden" name="id" id="id" value="">
                             <div class="col-sm-12 border-bottom">
-                                <input type="text"
-                                       class="form-control p-0 border-0" value="" name="name"
-                                       id="name">
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label for="address" class="col-sm-12"> Address</label>
-
-                            <div class="col-sm-12 border-bottom">
-                                <input type="text" placeholder="x0esjkxeposeabcacdswa"
-                                       class="form-control p-0 border-0" value="" name="address"
-                                       id="address">
+                                <input type="email"
+                                       class="form-control p-0 border-0" value="" name="email"
+                                       id="email">
                             </div>
                         </div>
 
@@ -144,49 +134,12 @@
                                       waves-effect" data-dismiss="modal">
                             Close
                         </button>
-                        <button id="updateBranchBtn" type="submit" class="
-                                      btn btn-success
+                        <button id="updatePreManagerBtn" type="submit" class="
+                                      btn btn-success text-white
                                       font-weight-medium
                                       waves-effect
                                     ">
-                            Update Branch
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <div id="deleteCoin" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="" id="deleteCoinForm" method="POST">
-                    <div class="modal-header d-flex align-items-center">
-                        <h4 class="modal-title" id="myModalLabel">
-                            Delete Coin
-                        </h4>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        @csrf
-                        <input type="hidden" value="" id="delid" name="id">
-                        <p>Are you sure you want to delete this coin?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="
-                                  btn btn-light-danger
-                                  text-danger
-                                  font-weight-medium
-                                  waves-effect" data-dismiss="modal">
-                            Close
-                        </button>
-                        <button id="deleteCoinBtn" type="submit" class="
-                                  btn btn-danger
-                                  font-weight-medium
-                                  text-white
-                                  waves-effect">
-                            Delete Coin
+                            Update Email
                         </button>
                     </div>
                 </form>

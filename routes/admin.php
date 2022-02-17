@@ -37,6 +37,7 @@ Route::post('branch/delete', [App\Http\Controllers\Admin\HomeController::class, 
 Route::get('managers', [App\Http\Controllers\Admin\HomeController::class, 'managers'])->name('managers');
 Route::get('manager/add', [App\Http\Controllers\Admin\HomeController::class, 'addManager'])->name('manager.create');
 Route::post('manager/store', [App\Http\Controllers\Admin\HomeController::class, 'storeManager'])->name('manager.store');
+Route::post('manager/edit', [App\Http\Controllers\Admin\HomeController::class, 'editWaitlistManager'])->name('manager.edit');
 
 Route::get('users', [App\Http\Controllers\Admin\HomeController::class, 'users'])->name('users');
 Route::get('user/{id}', [App\Http\Controllers\Admin\HomeController::class, 'userDetail'])->name('user');

@@ -36,6 +36,20 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title mb-0" style="margin-left: -15px">Transactions</h5>
+                            <div class="example">
+                                <h4 class="card-title mt-4">Select range</h4>
+                                <form action="{{ route('history') }}" method="GET">
+                                    @csrf
+                                <div class="input-daterange input-group" id="date-range">
+                                    <input type="date" class="form-control" name="start" value="{{ old('start') }}" required>
+
+                                    <span class="input-group-text bg-info b-0 text-white">TO</span>
+
+                                    <input type="date" class="form-control" name="end"  value="{{ old('end') }}">
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
+                                </form>
+                            </div>
                         </div>
                         <div class="table-responsive">
                             <table class="table no-wrap user-table mb-0">
@@ -45,7 +59,7 @@
                                         <tr style="margin-bottom: 2px;">
                                             <td class="{{ $transaction->txn_type == 'credit'?'left-border-success':'left-border-danger' }}">
                                                 <h5 class="font-weight-medium mb-0">
-                                                    <span class="text-capitalize">{{ $transaction->purpose }}</span>
+                                                    <span class="text-capitalize">{{ $transaction->description }}</span>
                                                 </h5>
                                                 <span class="text-muted">{{ $transaction->created_at->toDayDateTimeString() }}</span>
                                             </td>

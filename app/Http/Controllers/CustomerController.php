@@ -463,23 +463,55 @@ class CustomerController extends Controller
     }
 
     public function daily(){
-        $total = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'credit'], ['created_at', '>', Carbon::today()]])->sum('amount');
-        $transactions = Transaction::where([['user_id','=', auth()->user()->id], ['created_at', '>', Carbon::today()]])->orderBy('id', 'desc')->simplePaginate(31);
+        $total = Transaction::where([['user_id','=', auth()->user()->id],['user_type', '=', 'user'], ['txn_type', '=', 'credit'], ['created_at', '>', Carbon::today()]])->sum('amount');
+        $transactions = Transaction::where([['user_id','=', auth()->user()->id], ['user_type', '=', 'user'], ['created_at', '>', Carbon::today()]])->orderBy('id', 'desc')->simplePaginate(31);
         $balance = $total;
+
         return view('daily', compact('transactions', 'balance'));
     }
 
-    public function history(){
+    public function history(Request $request){
 
-        $total = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
+        $total = Transaction::where([['user_id','=', auth()->user()->id],['user_type', '=', 'user'], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $transactions = Transaction::where('user_id', auth()->user()->id)->whereBetween('created_at', [
+
+        $yearlyCredit = Transaction::where([['user_id','=', auth()->user()->id], ['user_type', '=', 'user'], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
-        ])->orderBy('id', 'desc')->simplePaginate(31);
-        $balance = $total;
+        ])->sum('amount');
+        $yearlyDebit = Transaction::where([['user_id','=', auth()->user()->id],['user_type', '=', 'user'], ['txn_type', '=', 'debit']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
+        ])->sum('amount');
+
+        if($request->start !== null and $request->end !== null){
+//            dd($request->start, $request->end);
+            $transactions = Transaction::where([['user_id', '=', auth()->user()->id], ['user_type', '=', 'user']])->whereBetween('created_at', [
+                $request->start,
+                $request->end,
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start !== null and $request->end == null){
+            $transactions = Transaction::where([['user_id', '=', auth()->user()->id], ['user_type', '=', 'user']])->whereBetween('created_at', [
+                $request->start,
+                Carbon::now(),
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start == null and $request->end !== null){
+            $transactions = Transaction::where([['user_id', '=', auth()->user()->id], ['user_type', '=', 'user']])->whereBetween('created_at', [
+                Carbon::now()->startOfYear(),
+                $request->end,
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start == null and $request->end == null){
+
+            $transactions = Transaction::where([['user_id', '=', auth()->user()->id], ['user_type', '=', 'user']])->whereBetween('created_at', [
+                Carbon::now()->startOfYear(),
+                Carbon::now()->endOfYear(),
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }
+
+        $balance = $yearlyCredit - $yearlyDebit;
+
         return view('history', compact('transactions', 'balance'));
     }
 

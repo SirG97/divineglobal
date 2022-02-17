@@ -61,7 +61,7 @@
                                         <tr style="margin-bottom: 2px;">
                                             <td class="{{ $transaction->txn_type == 'credit'?'left-border-success':'left-border-danger' }}">
                                                 <h5 class="font-weight-medium mb-0">
-                                                    <span class="text-capitalize">{{ $transaction->purpose }}</span>
+                                                    <span class="text-capitalize">{{ $transaction->description }}</span>
                                                 </h5>
                                                 <span class="text-muted">{{ $transaction->created_at->toDayDateTimeString() }}</span>
                                             </td>

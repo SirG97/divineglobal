@@ -36,6 +36,7 @@ Route::post('marketer/store', [App\Http\Controllers\Manager\HomeController::clas
 Route::get('/customers', [App\Http\Controllers\Manager\HomeController::class, 'customers'])->name('customers');
 Route::get('/daily', [App\Http\Controllers\Manager\HomeController::class, 'daily'])->name('daily');
 Route::get('/history', [App\Http\Controllers\Manager\HomeController::class, 'history'])->name('history');
+Route::get('/history/{id}', [App\Http\Controllers\Manager\HomeController::class, 'transaction'])->name('transaction');
 Route::get('/record', [App\Http\Controllers\Manager\HomeController::class, 'recordExpenditure'])->name('expenditure.create');
 Route::post('/record', [App\Http\Controllers\Manager\HomeController::class, 'saveExpenditure'])->name('expenditure.store');
 Route::get('/loan/apply', [App\Http\Controllers\Manager\HomeController::class, 'getLoan'])->name('loan.create');
