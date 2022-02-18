@@ -39,8 +39,10 @@ Route::get('/history', [App\Http\Controllers\Manager\HomeController::class, 'his
 Route::get('/history/{id}', [App\Http\Controllers\Manager\HomeController::class, 'transaction'])->name('transaction');
 Route::get('/record', [App\Http\Controllers\Manager\HomeController::class, 'recordExpenditure'])->name('expenditure.create');
 Route::post('/record', [App\Http\Controllers\Manager\HomeController::class, 'saveExpenditure'])->name('expenditure.store');
+
 Route::get('/loan/apply', [App\Http\Controllers\Manager\HomeController::class, 'getLoan'])->name('loan.create');
 Route::post('/loan/apply', [App\Http\Controllers\Manager\HomeController::class, 'applyForLoan'])->name('loan.store');
+
 Route::get('/loan/repay', [App\Http\Controllers\Manager\HomeController::class, 'repayLoan'])->name('loan.repay');
 Route::post('/loan/repay', [App\Http\Controllers\Manager\HomeController::class, 'storeLoanRepayment'])->name('loan.repay.store');
 Route::get('/loan/requests', [App\Http\Controllers\Manager\HomeController::class, 'getLoanRequests'])->name('loan.requests');

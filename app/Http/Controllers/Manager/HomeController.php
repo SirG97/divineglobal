@@ -296,7 +296,7 @@ class HomeController extends Controller
         $branches = Branch::where('id',  '!=', auth('manager')->user()->branch_id)->get();
         $loans = Loan::where('branch_id', auth('manager')->user()->branch_id)->with('lender')->get();
 
-        return view('manager.getLoan', compact('branches', 'loans'));
+        return view('manager.getloan', compact('branches', 'loans'));
     }
 
     public function applyForLoan(Request $request){

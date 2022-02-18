@@ -59,7 +59,8 @@
                             <thead>
                             <tr>
                                 <th class="border-top-0">Branch name</th>
-                                <th class="border-top-0">Address</th>
+                                <th class="border-top-0">Daily</th>
+                                <th class="border-top-0">History</th>
                                 <th class="border-top-0">Edit</th>
                                 <th class="border-top-0">Delete</th>
 
@@ -71,7 +72,9 @@
                                     <tr>
                                         <td scope="row" class="txt-oflo">{{$branch['name']}}</td>
 
-                                        <td>{{ $branch['address'] }}</td>
+                                        <td><a href="{{route('branch.daily', ['branch'=> $branch['id']])}}" class="btn btn-primary">Daily</a></td>
+                                        <td><a href="{{route('branch.history', ['branch'=> $branch['id']])}}" class="btn btn-primary">Historyy</a></td>
+
 
                                         <td>
                                             <button class="btn btn-sm btn-warning"
