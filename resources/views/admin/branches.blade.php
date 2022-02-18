@@ -72,8 +72,8 @@
                                     <tr>
                                         <td scope="row" class="txt-oflo">{{$branch['name']}}</td>
 
-                                        <td><a href="{{route('branch.daily', ['branch'=> $branch['id']])}}" class="btn btn-primary">Daily</a></td>
-                                        <td><a href="{{route('branch.history', ['branch'=> $branch['id']])}}" class="btn btn-primary">Historyy</a></td>
+                                        <td><a href="{{route('admin.branch.daily', ['branch'=> $branch['id']])}}" class="btn btn-primary">Daily</a></td>
+                                        <td><a href="{{route('admin.branch.history', ['branch'=> $branch['id']])}}" class="btn btn-primary">History</a></td>
 
 
                                         <td>
