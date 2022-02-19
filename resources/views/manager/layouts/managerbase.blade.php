@@ -275,7 +275,7 @@
         <!-- ============================================================== -->
         <!-- footer -->
         <!-- ============================================================== -->
-        <footer class="footer text-center"> 2022 © {{ config('APP_NAME', 'GDG Enterprise') }}
+        <footer class="footer text-center"> {{ now()->year }} © {{ config('APP_NAME', 'GDG Enterprise') }}
 
         </footer>
         <!-- ============================================================== -->
