@@ -115,7 +115,7 @@ class HomeController extends Controller
         $banks = [];
 
         $user = Customer::findOrFail($id);
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
@@ -182,7 +182,7 @@ class HomeController extends Controller
 
     public function customerHistory($id){
         $branch = auth('manager')->user()->branch_id;
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
             $balance = 0;
         }else{
