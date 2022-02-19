@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\BranchWallet;
 use App\Models\Customer;
 use App\Models\Manager;
 use App\Models\Transaction;
@@ -199,6 +200,15 @@ class HomeController extends Controller
         return view('admin.daily', compact('transactions', 'balance'));
     }
 
+    public function branchDaily($branch){
+
+        $credit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'], ['created_at', '>', Carbon::today()]])->sum('amount');
+        $debit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'], ['created_at', '>', Carbon::today()]])->sum('amount');
+        $transactions = Transaction::where([['branch_id','=', $branch], ['created_at', '>', Carbon::today()]])->orderBy('id', 'desc')->simplePaginate(31);
+        $balance = $credit - $debit;
+        return view('admin.branchdaily', compact('transactions', 'balance'));
+    }
+
     public function history(){
 
         $total = Transaction::where([['txn_type', '=', 'credit']])->whereBetween('created_at', [
@@ -212,9 +222,49 @@ class HomeController extends Controller
         $balance = $total;
         return view('admin.history', compact('transactions', 'balance'));
     }
-    public function transaction(){
 
-        $transaction = Transaction::where([['txn_type', '=', 'credit']])->first();
+    public function branchHistory(Request $request, $branch){
+        $b = BranchWallet::where('branch_id', $branch)->first();
+        if(!$b){
+            $balance = 0;
+            $bank = 0;
+            $cash = 0;
+        }else{
+            $balance = $b->balance;
+            $bank = $b->bank;
+            $cash = $b->cash;
+        }
+
+        if($request->start !== null and $request->end !== null){
+//            dd($request->start, $request->end);
+            $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
+                $request->start,
+                $request->end,
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start !== null and $request->end == null){
+            $transactions = Transaction::where(['branch_id', $branch])->whereBetween('created_at', [
+                $request->start,
+                Carbon::now(),
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start == null and $request->end !== null){
+            $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
+                Carbon::now()->startOfYear(),
+                $request->end,
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }elseif($request->start == null and $request->end == null){
+
+            $transactions = Transaction::where('branch_id', $branch)->whereBetween('created_at', [
+                Carbon::now()->startOfYear(),
+                Carbon::now()->endOfYear(),
+            ])->orderBy('id', 'desc')->simplePaginate(31);
+        }
+
+        return view('admin.historybranch', compact('transactions', 'balance', 'cash', 'bank', 'branch'));
+    }
+
+    public function transaction($id){
+
+        $transaction = Transaction::where([['txn_ref', '=', $id]])->first();
 
         return view('admin.transaction', compact('transaction'));
     }

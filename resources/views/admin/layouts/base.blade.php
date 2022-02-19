@@ -191,14 +191,14 @@
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.daily') }}"
                            aria-expanded="false">
                             <i class="fa fa-handshake" aria-hidden="true"></i>
-                            <span class="hide-menu">Daily Transaction</span>
+                            <span class="hide-menu">All Daily Transaction</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.history') }}"
                            aria-expanded="false">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span class="hide-menu">Transaction History</span>
+                            <span class="hide-menu">All Transaction History</span>
                         </a>
                     </li>
                     <li class="sidebar-item">

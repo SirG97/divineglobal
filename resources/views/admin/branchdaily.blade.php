@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('admin.layouts.base')
 
 @section('content')
     <div class="container">
@@ -24,33 +24,35 @@
         @endif
         <!-- ============================================================== -->
 
-        <!-- Pay, topup transfer -->
+            <!-- Pay, topup transfer -->
             <!-- ============================================================== -->
 
             <div class="row">
                 <div class="col-md-12 mt-3">
-                    @include('includes.balance')
+                    <div class="card-group">
+                        <div class="card p-2 p-lg-3">
+                            <div class="p-lg-3 p-2">
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-circle btn-warning text-white btn-lg" href="javascript:void(0)">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </button>
+                                    <div class="ms-4" style="width: 38%">
+                                        <h4 class="fw-normal">Balance</h4>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <h2 class="balance mb-0">₦{{ number_format($balance, '2', '.', ',') }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-12">
-
                     <div class="card">
-{{--                        <div class="card-body">--}}
-{{--                            <h5 class="card-title mb-0" style="margin-left: -15px">Transactions</h5>--}}
-{{--                            <div class="example">--}}
-{{--                                <h4 class="card-title mt-4">Select range</h4>--}}
-{{--                                <form action="{{ route('admin.history') }}" method="GET">--}}
-{{--                                    @csrf--}}
-{{--                                <div class="input-daterange input-group" id="date-range">--}}
-{{--                                    <input type="date" class="form-control" name="start" value="{{ old('start') }}" required>--}}
 
-{{--                                    <span class="input-group-text bg-info b-0 text-white">TO</span>--}}
-
-{{--                                    <input type="date" class="form-control" name="end"  value="{{ old('end') }}">--}}
-{{--                                    <button class="btn btn-primary" type="submit">Submit</button>--}}
-{{--                                </div>--}}
-{{--                                </form>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                        <div class="card-header">
+                            <h5 class="card-title mb-0" style="margin-left: -15px">Transactions</h5>
+                        </div>
                         <div class="table-responsive">
                             <table class="table no-wrap user-table mb-0">
                                 <tbody>
@@ -67,9 +69,9 @@
                                             </td>
                                             <td style="text-align: right;margin-right: 15px">
                                                 <a href="{{ route('admin.transaction', ['id' => $transaction->txn_ref]) }}">
-                                                 <span class="text-right {{ $transaction->txn_type == 'credit'?'text-success':'text-danger' }}">
-                                                    {{ $transaction->txn_type == 'credit'?'+':'-' }}
-                                                    ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
+                                                     <span class="text-right {{ $transaction->txn_type == 'credit'?'text-success':'text-danger' }}">
+                                                        {{ $transaction->txn_type == 'credit'?'+':'-' }}
+                                                        ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -81,6 +83,7 @@
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="card-footer">
                             <div class="p-2">
                                 {!! $transactions->links() !!}

@@ -46,11 +46,12 @@ Route::get('/users/{terms}/search', [App\Http\Controllers\Admin\HomeController::
 Route::get('marketers', [App\Http\Controllers\Admin\HomeController::class, 'marketers'])->name('marketers');
 Route::get('/customers', [App\Http\Controllers\Admin\HomeController::class, 'customers'])->name('customers');
 Route::get('/daily', [App\Http\Controllers\Admin\HomeController::class, 'daily'])->name('daily');
-Route::get('/daily/{branch}', [App\Http\Controllers\Admin\HomeController::class, 'daily'])->name('branch.daily');
+Route::get('/daily/{branch}', [App\Http\Controllers\Admin\HomeController::class, 'branchDaily'])->name('branch.daily');
 Route::get('/history', [App\Http\Controllers\Admin\HomeController::class, 'history'])->name('history');
-Route::get('/history/{branch}', [App\Http\Controllers\Admin\HomeController::class, 'history'])->name('branch.history');
-Route::get('/customer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'show'])->name('show');
+Route::get('/history/{branch}', [App\Http\Controllers\Admin\HomeController::class, 'branchHistory'])->name('branch.history');
+Route::get('/transaction/{id}', [App\Http\Controllers\Admin\HomeController::class, 'transaction'])->name('transaction');
 Route::get('/customer/{id}/history', [App\Http\Controllers\Admin\HomeController::class, 'customerHistory'])->name('customer.history');
+Route::get('/customer/{id}', [App\Http\Controllers\Admin\HomeController::class, 'show'])->name('show');
 Route::get('/password', [App\Http\Controllers\Admin\HomeController::class, 'password'])->name('password');
 Route::post('/password',  [App\Http\Controllers\Admin\HomeController::class, 'changePassword'])->name('password.change');
 Route::get('/customers/{id}/search', [App\Http\Controllers\Admin\HomeController::class, 'search'])->name('search');

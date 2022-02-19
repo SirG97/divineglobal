@@ -133,6 +133,8 @@ class HomeController extends Controller
         return view('manager.daily', compact('transactions', 'balance'));
     }
 
+
+
     public function history(Request $request){
 
         $branch = auth('manager')->user()->branch_id;
@@ -173,6 +175,10 @@ class HomeController extends Controller
 
         return view('manager.history', compact('transactions', 'balance', 'cash', 'bank'));
     }
+
+
+
+
 
     public function customerHistory($id){
         $branch = auth('manager')->user()->branch_id;
