@@ -158,38 +158,38 @@ class HomeController extends Controller
     }
 
     public function show($id){
-        $banks = [];
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.flutterwave.com/v3/banks/NG",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer " . config('app.FLUTTERWAVE_SECRET')
-            ),
-        ));
-
-        $banks = curl_exec($curl);
-        $banks = json_decode($banks);
-        if($banks->status == 'success'){
-            usort($banks->data, function($a, $b){ return strcmp($a->name, $b->name); });
-        }else{
-            $banks = [];
-        }
+//        $banks = [];
+//        $curl = curl_init();
+//
+//        curl_setopt_array($curl, array(
+//            CURLOPT_URL => "https://api.flutterwave.com/v3/banks/NG",
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_ENCODING => "",
+//            CURLOPT_MAXREDIRS => 10,
+//            CURLOPT_TIMEOUT => 0,
+//            CURLOPT_FOLLOWLOCATION => true,
+//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//            CURLOPT_CUSTOMREQUEST => "GET",
+//            CURLOPT_HTTPHEADER => array(
+//                "Authorization: Bearer " . config('app.FLUTTERWAVE_SECRET')
+//            ),
+//        ));
+//
+//        $banks = curl_exec($curl);
+//        $banks = json_decode($banks);
+//        if($banks->status == 'success'){
+//            usort($banks->data, function($a, $b){ return strcmp($a->name, $b->name); });
+//        }else{
+//            $banks = [];
+//        }
         $user = Customer::findOrFail($id);
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([ ['customer_id', '=', $id]])->first();
         if(!$wallet){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
         $balance = $wallet->balance;
 
-        return view('admin.customer', compact('user', 'banks', 'balance'));
+        return view('admin.customer', compact('user','balance'));
     }
 
     public function daily(){
@@ -271,9 +271,9 @@ class HomeController extends Controller
 
     public function customerHistory($id){
 
-        $wallet = Wallet::where([['user_type', '=', 'customer'], ['customer_id', '=', $id]])->first();
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
         if(!$wallet){
-            return back()->with('error', 'Could not retrieve customer wallet');
+            $balance = 0;
         }
         $transactions = Transaction::where('customer_id', $id)->orderBy('id', 'desc')->simplePaginate(31);
         $balance = $wallet->balance;
