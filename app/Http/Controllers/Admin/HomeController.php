@@ -69,8 +69,10 @@ class HomeController extends Controller
             'address' => $request->address
         ]);
 
-        Wallet::create(['customer_id' => $branch->id,
+        BranchWallet::create(['branch_id' => $branch->id,
                         'balance' => 0,
+                        'cash' => 0,
+                        'bank' => 0,
         ]);
 
         return back()->with('success', 'Branch created successfully');
@@ -97,7 +99,8 @@ class HomeController extends Controller
         ]);
 
         Branch::where('id', $request->id)->delete();
-        Wallet::where([['user_type', '=', 'branch'], ['customer_id', $request->id]])->delete();
+        Loan::where('id', $request->id)->delete();
+        BranchWallet::where([['branch_id', $request->id]])->delete();
         Transaction::where('branch_id', $request->id)->delete();
         User::where('branch_id', $request->id)->delete();
         Manager::where('branch_id', $request->id)->delete();
@@ -308,6 +311,7 @@ class HomeController extends Controller
 
         $customers =  Customer::where('first_name', 'LIKE', "%{$id}%")
             ->orWhere('surname', 'LIKE', "%{$id}%")
+            ->orWhere('account_id', 'LIKE', "%{$id}%")
             ->orWhere('phone', 'LIKE', "%{$id}%")->with('branch')->get();
 
         if($customers->count() > 0){
