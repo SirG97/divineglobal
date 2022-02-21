@@ -341,8 +341,8 @@ class HomeController extends Controller
             'amount' => 'required',
             'option' => 'required',
         ]);
-
-
+        $loan = Loan::findOrFail($request->id);
+dd( $loan->branch_id);
         DB::transaction(function () use ($request) {
 //            dd($request->id, $request->option, $request->amount);
             $loan = Loan::findOrFail($request->id);
@@ -360,7 +360,7 @@ class HomeController extends Controller
                 return back()->with('error', 'You do not have enough money in the bank to approve this loan');
             }
             $wallet = BranchWallet::where('branch_id', $loan->branch_id)->first();
-            dd($wallet, $loan->branch_id);
+
             // Debit the creditor
             Transaction::create([
                 'user_id' => auth('manager')->user()->id,
