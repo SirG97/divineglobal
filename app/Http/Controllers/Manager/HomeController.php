@@ -344,7 +344,7 @@ class HomeController extends Controller
         $loan = Loan::findOrFail($request->id);
 
         $wallet = BranchWallet::where('branch_id', $loan->branch_id)->first();
-        dd($loan, $loan->branch_id, $wallet, BranchWallet::all());
+        dd($loan, $loan->branch_id, $wallet, BranchWallet::all(), 'Creditor is:',BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first());
         DB::transaction(function () use ($request) {
 //            dd($request->id, $request->option, $request->amount);
             $loan = Loan::findOrFail($request->id);
