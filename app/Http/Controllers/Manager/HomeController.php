@@ -55,21 +55,25 @@ class HomeController extends Controller
         }else{
             $balance = $b->balance;
         }
+//
+//        $loanTaken = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
+//            Carbon::now()->startOfYear(),
+//            Carbon::now()->endOfYear()
+//        ])->sum('amount');
+//        $loanPaid = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
+//            Carbon::now()->startOfYear(),
+//            Carbon::now()->endOfYear()
+//        ])->sum('amount');
+        $loanTaken = Loan::where([['branch_id', '=', auth('manager')->user()->branch_id], ['status', '!=', 'rejected']])->sum('amount');
+        $amountPaidBack = Loan::where([['branch_id', '=', auth('manager')->user()->branch_id], ['status', '!=', 'rejected']])->sum('paid');
+        $loanReceived = $loanTaken - $amountPaidBack;
 
-        $loanTaken = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
-            Carbon::now()->startOfYear(),
-            Carbon::now()->endOfYear()
-        ])->sum('amount');
-        $loanPaid = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
-            Carbon::now()->startOfYear(),
-            Carbon::now()->endOfYear()
-        ])->sum('amount');
-
-        $loan = $loanTaken - $loanPaid;
+        $loanGiven = Loan::where([['lender_id', '=', auth('manager')->user()->branch_id], ['status', '!=', 'rejected']])->sum('amount');
+        $amountRecoveredBack = Loan::where([['lender_id', '=', auth('manager')->user()->branch_id], ['status', '!=', 'rejected']])->sum('paid');
+        $loanGivenOut = $loanGiven - $amountRecoveredBack;
         $transactions = Transaction::where('branch_id', $branch)->orderBy('id', 'desc')->take(30)->get();
         return view('manager.home', compact('totalCustomers','yearlyCredit', 'yearlyDebit',
-                                                    'transactions',
-                                                    'loan', 'balance', 'loanTaken', 'loanPaid'));
+                                                    'transactions', 'balance', 'loanReceived', 'loanGivenOut'));
     }
 
     public function marketers(){
@@ -331,7 +335,7 @@ class HomeController extends Controller
     }
 
     public function getLoanRequests(){
-        $loans = Loan::where([['lender_id', '=', auth('manager')->user()->branch_id],['status','!=','approved']])->with('branch')->get();
+        $loans = Loan::where([['lender_id', '=', auth('manager')->user()->branch_id],['status','=','pending']])->with('branch')->get();
         return view('manager.loanrequests', compact('loans'));
     }
 
