@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // modal.find('#blockUserForm').attr("action", form_action);
         modal.find('#id').val(id);
         modal.find('#amount').val(amount);
-        modal.find('#address').val(address);
+
 
     });
 
@@ -244,7 +244,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
     /*
         Edit coin ends here
      */
+    let rejectLoan = $('#rejectLoan');
+    rejectLoan.on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
 
+        let modal = $(this);
+        // modal.find('#blockReviewForm').attr("action", form_action);
+        modal.find('#loan_id').val(id);
+
+    });
+
+    rejectLoan.on('click', (e)=>{
+        e.preventDefault();
+        $("#rejectLoanForm").trigger('submit');
+    });
+
+
+    $('#payback').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+        let amount = button.data('amount'); // Extract info from data-* attributes
+        let modal = $(this);
+        // modal.find('#blockUserForm').attr("action", form_action);
+        modal.find('#id').val(id);
+        modal.find('#amount').val(amount);
+    });
+
+    $('#paybackBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#paybackForm").trigger('submit');
+    });
     /*
         Delete Coin
      */

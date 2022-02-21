@@ -39,7 +39,7 @@
                                         <td scope="row" class="txt-oflo">
                                             @if($loan['status'] == 'pending')
                                                 <span class="badge bg-warning">pending</span>
-                                            @elseif($loan['status'] == 'success')
+                                            @elseif($loan['status'] == 'approved')
                                                 <span class="badge bg-primary">approved</span>
                                             @elseif($loan['status'] == 'rejected')
                                                 <span class="badge bg-danger">rejected</span>
@@ -61,7 +61,7 @@
                                                     title="Delete"
                                                     data-toggle="modal"
                                                     data-target="#rejectLoan"
-                                                    data-delid="{{ $loan['id'] }}">Reject</button>
+                                                    data-id="{{ $loan['id'] }}">Reject</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -98,7 +98,7 @@
                             <div class="col-sm-12 border-bottom">
                                 <input type="text"
                                        class="form-control p-0 border-0" value="" name="amount"
-                                       id="amount">
+                                       id="amount" required>
                             </div>
                             <div class="d-flex justify-content-between mt-3">
                                 <div class="switch">
@@ -141,7 +141,7 @@
     <div id="rejectLoan" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="" id="deleteCoinForm" method="POST">
+                <form action="{{ route('manager.loan.reject') }}" id="rejectLoanForm" method="POST">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
                             Reject loan
@@ -150,7 +150,7 @@
                     </div>
                     <div class="modal-body">
                         @csrf
-                        <input type="hidden" value="" id="delid" name="id">
+                        <input type="hidden" value="" id="loan_id" name="id">
                         <p>Are you sure you want to reject this loan?</p>
                     </div>
                     <div class="modal-footer">

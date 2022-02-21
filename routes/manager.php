@@ -48,6 +48,7 @@ Route::post('/loan/repay', [App\Http\Controllers\Manager\HomeController::class, 
 Route::get('/loan/requests', [App\Http\Controllers\Manager\HomeController::class, 'getLoanRequests'])->name('loan.requests');
 Route::post('/loan/approve', [App\Http\Controllers\Manager\HomeController::class, 'approveLoan'])->name('loan.approve');
 Route::post('/loan/reject', [App\Http\Controllers\Manager\HomeController::class, 'rejectLoan'])->name('loan.reject');
+Route::post('/loan/payback', [App\Http\Controllers\Manager\HomeController::class, 'paybackLoan'])->name('loan.payback');
 Route::get('/customer/{id}', [App\Http\Controllers\Manager\HomeController::class, 'show'])->name('show');
 Route::get('/customer/{id}/history', [App\Http\Controllers\Manager\HomeController::class, 'customerHistory'])->name('customer.history');
 Route::get('/password', [App\Http\Controllers\Manager\HomeController::class, 'password'])->name('password');

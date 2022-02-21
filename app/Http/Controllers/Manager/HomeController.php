@@ -421,6 +421,7 @@ class HomeController extends Controller
             $loan->status = 'approved';
             $loan->amount = $request->amount;
             $loan->save();
+
         });
 
 
@@ -428,7 +429,105 @@ class HomeController extends Controller
     }
 
     public function rejectLoan(Request $request){
+        $request->validate([
+            'id' => 'required|numeric',
+        ]);
+        $loan = Loan::findOrFail($request->id);
+        $loan->status = 'rejected';
+        $loan->save();
 
+        return back()->with('success', 'Loan rejected successfully');
+    }
+
+    public function paybackLoan(Request $request){
+        $request->validate([
+            'id' => 'required|numeric',
+            'amount' => 'required',
+            'option' => 'required',
+        ]);
+
+        $creditor = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
+        if(!$creditor){
+            return back()->with('error', 'An error occurred and branch wallet could not be retrieved!');
+        }
+
+        if($request->option == 'cash' and $creditor->cash < (int)$request->amount){
+            return back()->with('error', 'You do not have enough cash at hand to payback this loan');
+        }
+
+        if($request->option == 'bank' and $creditor->bank < (int)$request->amount){
+            return back()->with('error', 'You do not have enough money in the bank to pay back this loan');
+        }
+
+        DB::transaction(function () use ($request, $creditor) {
+            $loan = Loan::findOrFail($request->id);
+            $wallet = BranchWallet::where('branch_id', $loan->lender_id)->first();
+            if(($loan->paid + $request->amount) < $loan->amount){
+                $loan->paid += $request->amount;
+            }elseif (($loan->paid + $request->amount) == $loan->amount){
+                $loan->status = 'paid';
+                $loan->paid += $request->amount;
+            }elseif(($loan->paid + $request->amount) > $loan->amount){
+                return back()->with('error', 'The amount you specified is more than what you owe. Make the figures to tally');
+            }
+            $loan->save();
+            Transaction::create([
+                'user_id' => auth('manager')->user()->id,
+                'branch_id' => auth('manager')->user()->branch_id,
+                'txn_ref' => Str::random(10),
+                'user_type' => 'manager',
+                'txn_type' =>'debit',
+                'purpose' => 'loan',
+                'option' => $request->option,
+                'amount' => $request->amount,
+                'balance_before' => $creditor->balance,
+                'balance_after' => $creditor->balance  - (int)$request->amount,
+                'description' => 'Loan payback to '. $loan->lender->name,
+                'remark' => ''
+            ]);
+            // Update his wallet
+            if($request->option === 'bank'){
+                $creditor->update(
+                    ['balance' => DB::raw('balance -' . $request->amount),
+                        'bank' => DB::raw('bank -' . $request->amount)]);
+            }else{
+                $creditor->update(
+                    ['balance' => DB::raw('balance -' . $request->amount),
+                        'cash' => DB::raw('cash -' . $request->amount),
+                    ]);
+            }
+
+            // Branch that is getting paid
+            Transaction::create([
+                'user_id' => $loan->manager_id,
+                'branch_id' => $loan->lender->id,
+                'txn_ref' => Str::random(10),
+                'user_type' => 'manager',
+                'txn_type' =>'credit',
+                'purpose' => 'loan',
+                'option' => $request->option,
+                'amount' => $request->amount,
+                'balance_before' => $wallet->balance,
+                'balance_after' => $wallet->balance + $request->amount,
+                'description' => 'Loan payback from '. $loan->branch->name,
+                'remark' => ''
+            ]);
+
+            if($request->option === 'bank'){
+                $wallet->update(
+                    ['balance' => DB::raw('balance +' . $request->amount),
+                        'bank' => DB::raw('bank +' . $request->amount)]);
+            }else{
+
+                $wallet->update(
+                    ['balance' => DB::raw('balance +' . $request->amount),
+                        'cash' => DB::raw('cash +' . $request->amount),
+                    ]);
+            }
+
+        });
+
+        return back()->with('success', 'Loan payment recorded successfully');
     }
 
     public function transaction($id){

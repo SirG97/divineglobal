@@ -25,8 +25,8 @@
                                 <th class="border-top-0">Paid Back</th>
                                 <th class="border-top-0">Status</th>
                                 <th class="border-top-0">Date</th>
-                                <th class="border-top-0">Approve</th>
-                                <th class="border-top-0">Reject</th>
+                                <th class="border-top-0">Action</th>
+
 
                             </tr>
                             </thead>
@@ -41,7 +41,7 @@
                                         <td scope="row" class="txt-oflo">
                                             @if($loan['status'] == 'pending')
                                                 <span class="badge bg-warning">pending</span>
-                                            @elseif($loan['status'] == 'success')
+                                            @elseif($loan['status'] == 'approved')
                                                 <span class="badge bg-primary">approved</span>
                                             @elseif($loan['status'] == 'rejected')
                                                 <span class="badge bg-danger">rejected</span>
@@ -50,6 +50,14 @@
                                             @endif
                                         </td>
                                         <td scope="row" class="txt-oflo">{{ $loan['created_at']->diffForHumans() }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-success"
+                                                    title="Payback loan"
+                                                    data-toggle="modal"
+                                                    data-target="#payback"
+                                                    data-id="{{ $loan['id'] }}"
+                                                    data-amount="{{ $loan['amount'] }}">Payback</button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else
@@ -67,5 +75,62 @@
             </div>
         </div>
     </div>
+    <div id="payback" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="paybackForm" action="{{ route('manager.loan.payback') }}" method="POST">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myModalLabel">
+                            Payback loan
+                        </h4>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="form-group mb-4">
+                            <label id="name" class="col-sm-12">Amount</label>
+                            <input type="hidden" name="id" id="id" value="">
+                            <div class="col-sm-12 border-bottom">
+                                <input type="text"
+                                       class="form-control p-0 border-0" value="" name="amount"
+                                       id="amount" required>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="switch">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="option" id="option" value="cash" checked>
+                                        <label class="form-check-label" for="inlineRadio1">Cash</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="option" id="option" value="bank" >
+                                        <label class="form-check-label" for="inlineRadio2">Bank</label>
+                                    </div>
+                                </div>
 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="
+                                      btn btn-light-danger
+                                      text-danger
+                                      font-weight-medium
+                                      waves-effect" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button id="updateBranchBtn" type="submit" class="
+                                      btn btn-success
+                                      font-weight-medium
+                                      waves-effect
+                                      text-white
+                                    ">
+                            Pay Loan
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection
