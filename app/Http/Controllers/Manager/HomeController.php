@@ -342,7 +342,9 @@ class HomeController extends Controller
             'option' => 'required',
         ]);
         $loan = Loan::findOrFail($request->id);
-dd( $loan->branch_id);
+
+        $wallet = BranchWallet::where('branch_id', $loan->branch_id)->first();
+        dd($loan, $loan->branch_id, $wallet, BranchWallet::all());
         DB::transaction(function () use ($request) {
 //            dd($request->id, $request->option, $request->amount);
             $loan = Loan::findOrFail($request->id);
