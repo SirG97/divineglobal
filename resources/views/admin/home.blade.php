@@ -7,7 +7,7 @@
         <!-- ============================================================== -->
         <!-- Three charts -->
         <!-- ============================================================== -->
-        <div class="row justify-content-center">
+        <div class="row justify-content-start">
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="white-box analytics-info">
                     <h3 class="box-title">Total Customers</h3>
@@ -23,40 +23,55 @@
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="white-box analytics-info">
-                    <h3 class="box-title">Yearly Total</h3>
+                    <h3 class="box-title">Balance</h3>
                     <ul class="list-inline two-part d-flex align-items-center mb-0">
                         {{--                        <li>--}}
                         {{--                            <div id="sparklinedash"><canvas width="67" height="30"--}}
                         {{--                                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>--}}
                         {{--                            </div>--}}
                         {{--                        </li>--}}
-                        <li class="ms-auto"><span class="counter text-success">₦{{ number_format($yearlyTotal) }}</span></li>
+                        <li class="ms-auto"><span class="counter text-success">₦{{ number_format($balance) }}</span></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="white-box analytics-info">
-                    <h3 class="box-title">Monthly Total</h3>
+                    <h3 class="box-title">Yearly Credit</h3>
                     <ul class="list-inline two-part d-flex align-items-center mb-0">
                         {{--                        <li>--}}
                         {{--                            <div id="sparklinedash2"><canvas width="67" height="30"--}}
                         {{--                                                             style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>--}}
                         {{--                            </div>--}}
                         {{--                        </li>--}}
-                        <li class="ms-auto"><span class="counter text-purple">₦{{number_format($monthlyTotal) }}</span></li>
+                        <li class="ms-auto"><span class="counter text-purple">₦{{number_format($yearlyCredit) }}</span></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="white-box analytics-info">
-                    <h3 class="box-title">Daily Total</h3>
+                    <h3 class="box-title">Yearly Debit</h3>
                     <ul class="list-inline two-part d-flex align-items-center mb-0">
                         <li>
                             <div id="sparklinedash3"><canvas width="67" height="30"
                                                              style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
                             </div>
                         </li>
-                        <li class="ms-auto"><span class="counter text-info">₦{{number_format($dailyTotal) }}</span>
+                        <li class="ms-auto"><span class="counter text-info">₦{{number_format($yearlyDebit) }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Expenses</h3>
+                    <ul class="list-inline two-part d-flex align-items-center mb-0">
+                        <li>
+                            <div id="sparklinedash3"><canvas width="67" height="30"
+                                                             style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
+                            </div>
+                        </li>
+                        <li class="ms-auto"><span class="counter text-info">₦{{number_format($expenses) }}</span>
                         </li>
                     </ul>
                 </div>

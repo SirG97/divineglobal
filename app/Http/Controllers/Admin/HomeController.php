@@ -37,20 +37,21 @@ class HomeController extends Controller
 
         $totalMarketers =  User::count();
         $totalCustomers = Customer::count();
-        $yearlyTotal = Transaction::where([['txn_type', '=', 'credit']])->whereBetween('created_at', [
+        $yearlyCredit = Transaction::where([['txn_type','=','credit'],['purpose', '=', 'deposit']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $monthlyTotal = Transaction::where([['txn_type', '=', 'credit']])->whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth(),
+        $yearlyDebit = Transaction::where([['txn_type','=','debit'],['purpose', '=', 'withdrawal']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $dailyTotal = Transaction::where([['txn_type', '=', 'credit']])->whereBetween('created_at', [
-            Carbon::now()->startOfDay(),
-            Carbon::now()->endOfDay()
+        $expenses = Transaction::where([['txn_type','=','debit'],['purpose', '=', 'logistics']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
         ])->sum('amount');
+        $balance = BranchWallet::sum('balance');
         $transactions = Transaction::orderBy('id', 'desc')->take(30)->get();
-        return view('admin.home', compact('totalCustomers','yearlyTotal', 'monthlyTotal', 'dailyTotal', 'transactions'));
+        return view('admin.home', compact('totalCustomers','balance', 'yearlyCredit', 'yearlyDebit', 'expenses', 'transactions'));
     }
 
     public function branches(){
@@ -209,7 +210,8 @@ class HomeController extends Controller
         $debit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'], ['created_at', '>', Carbon::today()]])->sum('amount');
         $transactions = Transaction::where([['branch_id','=', $branch], ['created_at', '>', Carbon::today()]])->orderBy('id', 'desc')->simplePaginate(31);
         $balance = $credit - $debit;
-        return view('admin.branchdaily', compact('transactions', 'balance'));
+        $branchname = Branch::where('id', $branch)->pluck('name');
+        return view('admin.branchdaily', compact('transactions', 'balance', 'branchname'));
     }
 
     public function history(){
@@ -261,8 +263,8 @@ class HomeController extends Controller
                 Carbon::now()->endOfYear(),
             ])->orderBy('id', 'desc')->simplePaginate(31);
         }
-
-        return view('admin.historybranch', compact('transactions', 'balance', 'cash', 'bank', 'branch'));
+        $branchname = Branch::where('id', $branch)->pluck('name');
+        return view('admin.historybranch', compact('transactions', 'balance', 'cash', 'bank', 'branchname'));
     }
 
     public function transaction($id){

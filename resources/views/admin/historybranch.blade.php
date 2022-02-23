@@ -1,5 +1,7 @@
 @extends('admin.layouts.base')
-
+@section('page')
+    {{ $branchname[0] }} Transaction History
+@endsection
 @section('content')
     <div class="container">
         <div class="page-content mt-3">

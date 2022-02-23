@@ -49,6 +49,11 @@ class HomeController extends Controller
             Carbon::now()->endOfYear(),
         ])->sum('amount');
 
+        $expenses = Transaction::where([['branch_id','=', $branch],['txn_type','=','debit'],['purpose', '=', 'logistics']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
+        ])->sum('amount');
+
         $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
         if(!$b){
             $balance = 0;
@@ -73,7 +78,7 @@ class HomeController extends Controller
         $loanGivenOut = $loanGiven - $amountRecoveredBack;
         $transactions = Transaction::where('branch_id', $branch)->orderBy('id', 'desc')->take(30)->get();
         return view('manager.home', compact('totalCustomers','yearlyCredit', 'yearlyDebit',
-                                                    'transactions', 'balance', 'loanReceived', 'loanGivenOut'));
+                                                    'transactions', 'balance', 'loanReceived', 'loanGivenOut', 'expenses'));
     }
 
     public function marketers(){
