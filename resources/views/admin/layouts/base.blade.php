@@ -68,7 +68,7 @@
 {{--                        @if(!is_null($config) and !is_null($config->logo))--}}
 {{--                            <img src="{{ asset('/storage') }}/{{ $config->logo }}" style="width: 50px; height: 50px; border-radius: 50%" alt="homepage" />--}}
 {{--                        @else--}}
-                            <img src="{{ asset('img/logo2.png') }}" style="width: 50px; height: 50px; border-radius: 50%" alt="homepage" />
+                            <img src="{{ asset('img/gdglogo.jpeg') }}" style="width: 50px; height: 50px; border-radius: 50%" alt="homepage" />
 {{--                        @endif--}}
                     </b>
                     <!--End Logo icon -->

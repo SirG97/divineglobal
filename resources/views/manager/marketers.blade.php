@@ -19,22 +19,22 @@
                 {{ session('warning') }}
             </div>
         @endif
-        <div class="row">
-            <div class="col-md-offset-6"></div>
-            <div class="col-md-6">
-                <div class="nav-item search-box mb-3" style="position: relative">
-                    <form class="app-search d-block">
-                        <input type="text" id="user_search" class="form-control" placeholder="Search users...">
-                        <a href="" class="active"><i class="fa fa-search"></i></a>
-                    </form>
-                    <div class="user-search-result">
-                        <ul class="list-group list-group-flush" id="search-result-list">
+{{--        <div class="row">--}}
+{{--            <div class="col-md-offset-6"></div>--}}
+{{--            <div class="col-md-6">--}}
+{{--                <div class="nav-item search-box mb-3" style="position: relative">--}}
+{{--                    <form class="app-search d-block">--}}
+{{--                        <input type="text" id="user_search" class="form-control" placeholder="Search users...">--}}
+{{--                        <a href="" class="active"><i class="fa fa-search"></i></a>--}}
+{{--                    </form>--}}
+{{--                    <div class="user-search-result">--}}
+{{--                        <ul class="list-group list-group-flush" id="search-result-list">--}}
 
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">

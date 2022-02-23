@@ -24,4 +24,8 @@ class Transaction extends Model
     public function manager(){
         return $this->belongsTo(Manager::class);
     }
+
+    public function branch(){
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
 }

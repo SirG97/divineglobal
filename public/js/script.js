@@ -196,32 +196,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         Delete User ends here
      */
 
-    /*
-        Delete Review
-    */
 
-    $('#deleteReview').on('show.bs.modal', function (event) {
-        let button = $(event.relatedTarget); // Button that triggered the modal
-        let id = button.data('id'); // Extract info from data-* attributes
-
-        let modal = $(this);
-        // modal.find('#blockReviewForm').attr("action", form_action);
-        modal.find('#review_id').val(id);
-
-    });
-
-    $('#deleteReviewBtn').on('click', (e)=>{
-        e.preventDefault();
-        $("#deleteReviewForm").trigger('submit');
-    });
-
-    /*
-        Delete Review ends here
-     */
-
-    /*
-        Edit coin
-    */
 
     $('#approveLoan').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
@@ -344,79 +319,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         $('.fa-star').css('color', 'black');
     }
 
-    const saveRating = (ratingIndex) => {
-        const url = '/review/save';
-
-        let d = new FormData();
-
-        // d.append('_token', $('#token').data('token'));
-        d.append('vendor_id', $('#vendor').data('vendor'));
-        d.append('order_id', $('#vendor').data('order_id'));
-        d.append('rating', ratingIndex + 1);
-        d.append('feedback', $('#rating_feedback').val() || starText(ratingIndex));
-        if(ratingIndex !== null || ratingIndex !== undefined  || isNaN(ratingIndex)){
-            $.ajax({
-                url: url,
-                type: 'POST',
-                processData: false,
-                contentType: false,
-                cache: false,
-                data: d,
-                beforeSend: function(){
-                    $('#save-review').html(`<i class="fas fa-circle-notch fa-spin fa-pulse" disabled></i>`);
-                },
-                success: function (response) {
-                    let data = response;
-                    console.log(data);
-                    let message = data.success;
-                    msg.innerHTML = alertMessage('success', message);
-                    $('#save-review').html('Save review');
-                    interval(5000);
-                    // modal.close()
-                },
-                error: function(request, error){
-                    let message = JSON.parse(request.responseText);
-                    let errors = message.error;
-                    let ul = '<ul>';
-                    $.each(errors, (key, value) => {
-                        ul += value;
-                    });
-                    ul += '</ul>';
-                    msg.innerHTML = alertMessage('danger', ul);
-                    $('#save-review').html('Save review');
-                    interval(5000);
-                }
-            });
-        }
-
-    }
-
-    const starText = (index) => {
-        switch (index) {
-            case 0:
-                return 'Poor';
-            case 1:
-                return 'Bad';
-            case 2:
-                return 'Good';
-            case 3:
-                return 'Great';
-            case 4:
-                return 'Perfect';
-            default:
-                break;
-        }
-    }
-
-    $('#save-review').on('click', () =>{
-        if(ratedIndex != -1){
-            saveRating(ratedIndex);
-        }else{
-            console.log('rated index is not here');
-        }
-
-    });
-
     // Show search dropdown
     const search = $('#user_search');
     const search_result = $('.user-search-result');
@@ -469,7 +371,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                                         <h6>${value.first_name} ${value.surname}</h6>
                                         <small>${value.phone !== null ? value.phone : ''}</small>
                                     </div>
-                                    <p class="mb-1">${value.branch.name}</p>
+                                    <p class="mb-1">${value.account_id}</p>
                                     </a>
                                 </li>`;
 

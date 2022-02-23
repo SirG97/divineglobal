@@ -535,8 +535,7 @@ class HomeController extends Controller
     }
 
     public function transaction($id){
-        $transaction = Transaction::where([['txn_ref', '=', $id]])->first();
-
+        $transaction = Transaction::where([['txn_ref', '=', $id]])->with('branch')->first();
         return view('manager.transaction', compact('transaction'));
     }
 }

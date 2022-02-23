@@ -64,7 +64,7 @@
                     <!-- Logo icon -->
                     <b class="logo-icon">
                         <!-- Dark Logo icon -->
-                        <img src="{{ asset('img/logo2.png') }}" style="width: 50px; height: 50px; border-radius: 50%" alt="homepage" />
+                        <img src="{{ asset('img/gdglogo.jpeg') }}" style="width: 50px; height: 50px; border-radius: 50%" alt="homepage" />
                     </b>
                     <!--End Logo icon -->
                     <!-- Logo text -->

@@ -24,7 +24,9 @@
                     <dl class="row">
                         @if($transaction->customer_id)
                             <dt class="col-sm-3">Customer</dt>
-                            <dd class="col-sm-9">{{ $transaction->customer->first_name . ' ' . $transaction->customer->surname }}</dd>
+                            <dd class="col-sm-9">{{ $transaction->customer->first_name . ' ' . $transaction->customer->surname }}</dd> <dt class="col-sm-3">Customer</dt>
+                            <dt class="col-sm-3">Account number</dt>
+                            <dd class="col-sm-9">{{ $transaction->customer->account_id }}</dd>
                         @endif
                         <dt class="col-sm-3">Transaction Ref</dt>
                         <dd class="col-sm-9">{{$transaction->txn_ref}}</dd>
@@ -34,8 +36,10 @@
                         <dd class="col-sm-9">{{$transaction->txn_type}}</dd>
                         <dt class="col-sm-3">Purpose</dt>
                         <dd class="col-sm-9">{{$transaction->purpose}}</dd>
+                        <dt class="col-sm-3">Branch</dt>
+                        <dd class="col-sm-9">{{ $transaction->branch->name }}</dd>
                             @if($transaction->customer_id)
-                                <dt class="col-sm-3">Marketer</dt>
+                                <dt class="col-sm-3">Deposited by</dt>
                                 <dd class="col-sm-9">{{$transaction->user->name}}</dd>
                             @endif
                         <dt class="col-sm-3">Option</dt>
