@@ -264,7 +264,7 @@ class HomeController extends Controller
             ])->orderBy('id', 'desc')->simplePaginate(31);
         }
         $branchname = Branch::where('id', $branch)->pluck('name');
-        return view('admin.historybranch', compact('transactions', 'balance', 'cash', 'bank', 'branchname'));
+        return view('admin.historybranch', compact('transactions', 'balance', 'cash', 'bank', 'branch', 'branchname'));
     }
 
     public function transaction($id){
