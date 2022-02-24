@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\BranchWallet;
 use App\Models\Customer;
+use App\Models\Loan;
 use App\Models\Manager;
 use App\Models\Transaction;
 use App\Models\User;

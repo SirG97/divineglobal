@@ -192,6 +192,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         $("#deleteUserForm").trigger('submit');
     });
 
+    $('#deleteBranch').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('delid'); // Extract info from data-* attributes
+
+        let modal = $(this);
+        // modal.find('#blockUserForm').attr("action", form_action);
+        modal.find('#del_branch_id').val(id);
+
+    });
+
+    $('#deleteBranchBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#deleteBranchForm").trigger('submit');
+    });
+
+
     /*
         Delete User ends here
      */

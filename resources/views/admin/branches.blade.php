@@ -178,7 +178,7 @@
                     </div>
                     <div class="modal-body">
                         @csrf
-                        <input type="hidden" value="" id="delid" name="id">
+                        <input type="hidden" value="" id="del_branch_id" name="id">
                         <p class="text-danger">Please beware that deleting a branch will result in deleting all associated data including
                             customers, marketers, payment and manager. Only delete a branch if it is created in error
                             and has not been used by anybody. Are you sure you want to delete</p>
@@ -191,7 +191,7 @@
                                   waves-effect" data-dismiss="modal">
                             Close
                         </button>
-                        <button id="deleteCoinBtn" type="submit" class="
+                        <button id="deleteBranchBtn" type="submit" class="
                                   btn btn-danger
                                   font-weight-medium
                                   text-white
