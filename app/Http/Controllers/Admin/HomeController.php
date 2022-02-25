@@ -50,9 +50,13 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
+        $profit = Transaction::where([['purpose', '=', 'commission']])->whereBetween('created_at', [
+            Carbon::now()->startOfYear(),
+            Carbon::now()->endOfYear(),
+        ])->sum('amount');
         $balance = BranchWallet::sum('balance');
         $transactions = Transaction::orderBy('id', 'desc')->take(30)->get();
-        return view('admin.home', compact('totalCustomers','balance', 'yearlyCredit', 'yearlyDebit', 'expenses', 'transactions'));
+        return view('admin.home', compact('totalCustomers','balance','profit', 'yearlyCredit', 'yearlyDebit', 'expenses', 'transactions'));
     }
 
     public function branches(){
