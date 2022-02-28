@@ -187,6 +187,13 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.fund.move') }}"
+                           aria-expanded="false">
+                            <i class="fa fa-trophy" aria-hidden="true"></i>
+                            <span class="hide-menu">Move Funds to Bank/Cash</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('manager.loan.create') }}"
                            aria-expanded="false">
                             <i class="fa fa-microchip" aria-hidden="true"></i>

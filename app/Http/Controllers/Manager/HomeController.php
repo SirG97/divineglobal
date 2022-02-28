@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audit;
 use App\Models\Branch;
 use App\Models\BranchWallet;
 use App\Models\Customer;
@@ -545,5 +546,71 @@ class HomeController extends Controller
     public function transaction($id){
         $transaction = Transaction::where([['txn_ref', '=', $id]])->with('branch')->first();
         return view('manager.transaction', compact('transaction'));
+    }
+
+    public function transferForm(){
+        $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
+        if(!$b){
+            $balance = 0;
+            $bank = 0;
+            $cash = 0;
+        }else{
+            $balance = $b->balance;
+            $bank = $b->bank;
+            $cash = $b->cash;
+        }
+        return view('manager.movefunds', compact('balance', 'bank', 'cash'));
+    }
+
+    public function transfer(Request $request){
+        $request->validate([
+            'amount' => 'required|numeric',
+            'option' => 'required'
+        ]);
+        $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
+        if(!$b){
+            $balance = 0;
+            $bank = 0;
+            $cash = 0;
+        }else{
+            $balance = $b->balance;
+            $bank = $b->bank;
+            $cash = $b->cash;
+        }
+
+        if($request->option == 'cash' and $request->amount > $cash){
+            return back()->with('error','Insufficient cash balance to deposit to bank');
+        }
+
+        if($request->option == 'bank' and $request->amount > $bank){
+            return back()->with('error','Insufficient bank balance to withdraw to cash');
+        }
+
+        if($request->option === 'cash'){
+            $b->update(
+                    ['balance' => $b->balance,
+                    'cash' => $b->cash - $request->amount,
+                    'bank' => $b->bank + $request->amount]);
+            $message = 'Cash moved to bank successfully';
+            Audit::create([
+                'txn_ref' => Str::random(10),
+                'branch_id' => auth('manager')->user()->branch_id,
+                'manager_id' => auth('manager')->user()->id,
+                'log' => auth('manager')->user()->name . ' moved ₦' .  number_format($request->amount, '2', '.', ',') . ' to bank',
+            ]);
+        }elseif($request->option === 'bank'){
+            $b->update(
+                    ['balance' => $b->balance,
+                    'cash' => $b->cash + $request->amount,
+                    'bank' => $b->bank - $request->amount]);
+            $message = 'Funds withdrawal successfully';
+            Audit::create([
+                'txn_ref' => Str::random(10),
+                'branch_id' => auth('manager')->user()->branch_id,
+                'manager_id' => auth('manager')->user()->id,
+                'log' => auth('manager')->user()->name . ' moved ₦' . number_format($request->amount, '2', '.', ',') . ' to cash',
+            ]);
+        }
+        return back()->with('success', $message);
     }
 }

@@ -96,18 +96,28 @@
                                     @foreach($transactions as $transaction)
                                         <tr style="margin-bottom: 2px;">
 
-                                            <td class="{{ $transaction->txn_type == 'credit'?'left-border-success':'left-border-danger' }}">
+                                            <td class="@if($transaction->txn_type == 'credit') left-border-success
+                                                    @elseif($transaction->txn_type == 'debit' and $transaction->purpose == 'commission' or $transaction->purpose == 'transfer') left-border-primary
+                                                    @elseif($transaction->txn_type == 'debit') left-border-danger
+                                                    @endif">
                                                 <a href="{{ route('manager.transaction', ['id' => $transaction->txn_ref]) }}">
                                                     <h5 class="font-weight-medium mb-0">
-                                                        <span class="text-capitalize">{{ $transaction->purpose }}</span>
+                                                        <span class="text-capitalize">{{ $transaction->description }}</span>
                                                     </h5>
                                                     <span class="text-muted">{{ $transaction->created_at->toDayDateTimeString() }}</span>
                                                 </a>
                                             </td>
                                             <td style="text-align: right;margin-right: 15px">
                                                 <a href="{{ route('manager.transaction', ['id' => $transaction->txn_ref]) }}">
-                                                    <span class="text-right {{ $transaction->txn_type == 'credit'?'text-success':'text-danger' }}">
-                                                        {{ $transaction->txn_type == 'credit'?'+':'-' }}
+                                                    <span class="text-right @if($transaction->txn_type == 'credit') text-success
+                                                    @elseif($transaction->txn_type == 'debit' and $transaction->purpose == 'commission' or $transaction->purpose == 'transfer') text-primary
+                                                    @elseif($transaction->txn_type == 'debit') text-danger
+                                                    @endif ">
+                                                    @if($transaction->txn_type == 'credit') +
+                                                        @elseif($transaction->txn_type == 'debit' and $transaction->purpose == 'commission' or $transaction->purpose == 'transfer')
+                                                        @elseif($transaction->txn_type == 'debit') -
+                                                        @endif
+
                                                         ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
                                                 </a>
                                             </td>

@@ -385,6 +385,10 @@ form label {
     border-left: 2px solid red;
 }
 
+.left-border-primary{
+    border-left: 2px solid #5e72e4;;
+}
+
 .p-form>label {
     padding: 1rem 1rem;
 }
@@ -492,8 +496,7 @@ form label {
     transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 
     border: 0;
-    border-radius: 1rem;
-    background-color: #5e72e4;
+    border-radius: 1rem;lbackground-color: #5e72e4;
     box-shadow: 0 .1rem .25rem rgba(0, 0, 0, .1);
 
     -webkit-appearance: none;
