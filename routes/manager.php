@@ -33,6 +33,7 @@ Route::post('password/confirm', 'Auth\ConfirmPasswordController@confirm');
 Route::get('marketers', [App\Http\Controllers\Manager\HomeController::class, 'marketers'])->name('marketers');
 Route::get('marketer/add', [App\Http\Controllers\Manager\HomeController::class, 'addMarketer'])->name('marketer.create');
 Route::post('marketer/store', [App\Http\Controllers\Manager\HomeController::class, 'storeMarketer'])->name('marketer.store');
+Route::post('marketer/edit', [App\Http\Controllers\Manager\HomeController::class, 'editMarketer'])->name('marketer.edit');
 Route::get('/customers', [App\Http\Controllers\Manager\HomeController::class, 'customers'])->name('customers');
 Route::get('/daily', [App\Http\Controllers\Manager\HomeController::class, 'daily'])->name('daily');
 Route::get('/history', [App\Http\Controllers\Manager\HomeController::class, 'history'])->name('history');

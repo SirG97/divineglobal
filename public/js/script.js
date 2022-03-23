@@ -284,6 +284,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         $("#updatePreManagerForm").trigger('submit');
     });
 
+
+    $('#updateMarketer').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+        let email = button.data('email'); // Extract info from data-* attributes
+        let name = button.data('name'); // Extract info from data-* attributes
+        let modal = $(this);
+        modal.find('#id').val(id);
+        modal.find('#email').val(email);
+        modal.find('#name').val(name);
+    });
+
+    $('#updateMarketerBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#updateMarketerForm").trigger('submit');
+    });
+
     $('#rejectLoan').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Button that triggered the modal
         let delid = button.data('delid'); // Extract info from data-* attributes

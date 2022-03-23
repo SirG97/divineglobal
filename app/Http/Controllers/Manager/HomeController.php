@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class HomeController extends Controller
 {
@@ -116,6 +117,20 @@ class HomeController extends Controller
         ]);
 
         return back()->with('success', 'Manager added to preregistration list successfully');
+    }
+
+    public function editMarketer(Request $request){
+        $request->validate([
+            'email' => 'required|'. Rule::unique('users')->ignore($request->id),
+            'name' => 'required|'. Rule::unique('users')->ignore($request->id),
+        ]);
+
+        User::where('id', $request->id)->update([
+            'email' =>  $request->email,
+            'name' =>  $request->name,
+        ]);
+
+        return back()->with('success', 'Marketer edited successfully');
     }
 
     public function customers(){

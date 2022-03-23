@@ -51,7 +51,7 @@
 {{--                                <th class="border-top-0">Phone</th>--}}
                                 <th class="border-top-0">Joined</th>
                                 <th class="border-top-0">Status</th>
-{{--                                <th class="border-top-0">View</th>--}}
+                                <th class="border-top-0">Edit</th>
 {{--                                <th class="border-top-0">Block</th>--}}
 {{--                                <th class="border-top-0">Delete</th>--}}
                             </tr>
@@ -93,12 +93,14 @@
 {{--                                                @endif--}}
 {{--                                            </button>--}}
 {{--                                        </td>--}}
-{{--                                        <td>--}}
-{{--                                            <button class="btn btn-danger btn-sm inline-block"--}}
-{{--                                                    data-toggle="modal"--}}
-{{--                                                    data-target="#deleteUser"--}}
-{{--                                                    data-id="{{ $user['id'] }}"><i class="fa fa-trash"></i></button>--}}
-{{--                                        </td>--}}
+                                        <td>
+                                            <button class="btn btn-danger btn-sm inline-block text-white"
+                                                    data-toggle="modal"
+                                                    data-target="#updateMarketer"
+                                                    data-name="{{ $user['name'] }}"
+                                                    data-email="{{ $user['email'] }}"
+                                                    data-id="{{ $user['id'] }}">Edit <i class="fa fa-edit"></i></button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else
@@ -115,6 +117,59 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="updateMarketer" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="updateMarketerForm" action="{{ route('manager.marketer.edit') }}" method="POST">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myModalLabel">
+                            Update Marketer
+                        </h4>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <div class="form-group mb-4">
+                            <label for="name" class="col-sm-12">Name</label>
+                            <input type="hidden" name="id" id="id" value="">
+                            <div class="col-sm-12 border-bottom">
+                                <input type="text"
+                                       class="form-control p-0 border-0" value="" name="name"
+                                       id="name">
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="email" class="col-sm-12">Email</label>
+
+                            <div class="col-sm-12 border-bottom">
+                                <input type="email"
+                                       class="form-control p-0 border-0" value="" name="email"
+                                       id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="
+                                      btn btn-light-danger
+                                      text-danger
+                                      font-weight-medium
+                                      waves-effect" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button id="updateMarketerBtn" type="submit" class="
+                                      btn btn-success text-white
+                                      font-weight-medium
+                                      waves-effect
+                                    ">
+                            Update Email
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
 {{--    <div id="blockUser" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">--}}
 {{--        <div class="modal-dialog">--}}
