@@ -24,7 +24,7 @@
                     <dl class="row">
                         @if($transaction->customer_id)
                             <dt class="col-sm-3">Customer</dt>
-                            <dd class="col-sm-9">{{ $transaction->customer->first_name . ' ' . $transaction->customer->surname }}</dd> <dt class="col-sm-3">Customer</dt>
+                            <dd class="col-sm-9">{{ $transaction->customer->first_name . ' ' . $transaction->customer->surname }}</dd>
                             <dt class="col-sm-3">Account number</dt>
                             <dd class="col-sm-9">{{ $transaction->customer->account_id }}</dd>
                         @endif

@@ -114,7 +114,8 @@ class HomeController extends Controller
     }
 
     public function managers(){
-        $managers = Manager::all();
+        $managers = Manager::with('branch')->get();
+        
         return view('admin.managers', compact('managers'));
     }
 
