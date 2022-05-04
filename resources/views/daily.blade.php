@@ -60,7 +60,7 @@
                                     @foreach($transactions as $transaction)
                                         <tr style="margin-bottom: 2px;">
                                             <td class="{{ $transaction->txn_type == 'credit'?'left-border-success':'left-border-danger' }}">
-                                                <a href="{{ route('admin.transaction', ['id' => $transaction->txn_ref]) }}">
+                                                <a href="{{ route('transaction', ['id' => $transaction->txn_ref]) }}">
                                                     <h5 class="font-weight-medium mb-0">
                                                         <span class="text-capitalize">{{ $transaction->description }}</span>
                                                     </h5>
@@ -68,7 +68,7 @@
                                                 </a>
                                             </td>
                                             <td style="text-align: right;margin-right: 15px">
-                                                <a href="{{ route('admin.transaction', ['id' => $transaction->txn_ref]) }}">
+                                                <a href="{{ route('transaction', ['id' => $transaction->txn_ref]) }}">
                                                     <span class="text-right {{ $transaction->txn_type == 'credit'?'text-success':'text-danger' }}">
                                                     {{ $transaction->txn_type == 'credit'?'+':'-' }}
                                                     ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
