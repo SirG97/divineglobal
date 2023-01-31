@@ -35,8 +35,7 @@ Auth::routes();
     Route::post('/mark', [App\Http\Controllers\CustomerController::class, 'mark'])->name('mark');
     Route::get('/daily', [App\Http\Controllers\CustomerController::class, 'daily'])->name('daily');
     Route::get('/history', [App\Http\Controllers\CustomerController::class, 'history'])->name('history');
-    Route::get('/withdraw/{id}', [App\Http\Controllers\CustomerController::class, 'withdraw'])->name('withdraw');
-    Route::post('/withdraw', [App\Http\Controllers\CustomerController::class, 'storeWithdraw'])->name('withdraw.store');
+
     Route::get('/password', [App\Http\Controllers\HomeController::class, 'password'])->name('password');
     Route::post('/password',  [App\Http\Controllers\HomeController::class, 'changePassword'])->name('password.change');
     Route::post('/account/resolve', [App\Http\Controllers\CustomerController::class, 'resolveAccountNumber'])->name('account.resolve');

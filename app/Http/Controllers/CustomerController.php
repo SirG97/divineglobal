@@ -373,6 +373,7 @@ class CustomerController extends Controller
     }
 
     public function  storeWithdraw(Request $request){
+        dd('Je');
         $request->validate([
             'id' => 'required|numeric',
             'amount' => 'required|numeric',

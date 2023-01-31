@@ -35,6 +35,7 @@ Route::get('marketer/add', [App\Http\Controllers\Manager\HomeController::class, 
 Route::post('marketer/store', [App\Http\Controllers\Manager\HomeController::class, 'storeMarketer'])->name('marketer.store');
 Route::post('marketer/edit', [App\Http\Controllers\Manager\HomeController::class, 'editMarketer'])->name('marketer.edit');
 Route::get('/customers', [App\Http\Controllers\Manager\HomeController::class, 'customers'])->name('customers');
+Route::post('/customer/delete', [App\Http\Controllers\Manager\HomeController::class, 'deleteCustomer'])->name('customer.delete');
 Route::get('/daily', [App\Http\Controllers\Manager\HomeController::class, 'daily'])->name('daily');
 Route::get('/history', [App\Http\Controllers\Manager\HomeController::class, 'history'])->name('history');
 Route::get('/history/{id}', [App\Http\Controllers\Manager\HomeController::class, 'transaction'])->name('transaction');
@@ -58,3 +59,8 @@ Route::get('/password', [App\Http\Controllers\Manager\HomeController::class, 'pa
 Route::post('/password',  [App\Http\Controllers\Manager\HomeController::class, 'changePassword'])->name('password.change');
 Route::get('/customers/{id}/search', [App\Http\Controllers\Manager\HomeController::class, 'search'])->name('search');
 
+
+Route::post('/marketer/delete', [App\Http\Controllers\Manager\HomeController::class, 'deleteMarketer'])->name('user.delete');
+
+Route::get('/withdraw/{id}', [App\Http\Controllers\Manager\HomeController::class, 'withdraw'])->name('withdraw');
+Route::post('/withdraw', [App\Http\Controllers\Manager\HomeController::class, 'storeWithdraw'])->name('withdraw.store');

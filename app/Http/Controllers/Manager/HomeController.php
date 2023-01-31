@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Waitlist;
 use App\Models\Wallet;
 use Carbon\Carbon;
+use http\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -134,7 +135,7 @@ class HomeController extends Controller
     }
 
     public function customers(){
-        $users =  Customer::where('branch_id', auth('manager')->user()->branch_id)->orderBy('id', 'desc')->simplePaginate(50);
+        $users =  Customer::where('branch_id', auth('manager')->user()->branch_id)->with('user')->orderBy('id', 'desc')->simplePaginate(50);
 
         return view('manager.customers', compact('users'));
     }
@@ -150,6 +151,151 @@ class HomeController extends Controller
         $balance = $wallet->balance;
 
         return view('manager.customer', compact('user', 'banks', 'balance'));
+    }
+
+
+    public function edit($id){
+
+    }
+
+    public function deleteCustomer(Request $request){
+        $request->validate([
+            'id' => 'required'
+        ]);
+
+        try{
+            $transactions = Transaction::where('user_id', $request->id)->get();
+
+            foreach ($transactions as $transaction){
+                $transaction->delete();
+            }
+            Wallet::where('customer_id', $request->id)->delete();
+            Customer::where('id', $request->id)->delete();
+
+            return redirect()->back()->with('success', 'Customer deleted successfully');
+        }catch (\Throwable $e){
+            return redirect()->back()->with('error', 'There was an error deleting this customer');
+
+        }
+
+    }
+
+    public function deleteMarketer(Request $request){
+        $request->validate([
+            'id' => 'required'
+        ]);
+
+        try{
+            $user = User::where('id', $request->id)->first();
+            Waitlist::where([['email','=', $user->email],['user_type', '=', 'marketer']])->delete();
+            $user->delete();
+
+            return redirect()->back()->with('success', 'Marketer deleted successfully');
+        }catch (\Throwable $e){
+            return redirect()->back()->with('error', 'There was an error deleting this marketer');
+
+        }
+
+    }
+
+    public function withdraw($id){
+        $user = Customer::findOrFail($id);
+        $wallet = Wallet::where([['customer_id', '=', $id]])->first();
+        if(!$wallet){
+            return back()->with('error', 'Could not retrieve customer wallet');
+        }
+        $balance = $wallet->balance;
+        return view('manager.withdraw', compact('user', 'balance'));
+    }
+
+    public function  storeWithdraw(Request $request){
+        $request->validate([
+            'id' => 'required|numeric',
+            'amount' => 'required|numeric',
+            'charges' => 'nullable|numeric',
+        ]);
+        $customer = Customer::findOrFail($request->id);
+        $customerWallet = Wallet::where([['customer_id', '=', $request->id]])->first();
+        if(!$customerWallet){
+            return back()->with('error', 'Customer wallet not found');
+        }
+
+        if($request->amount < 1){
+            return back()->with('error', 'Withdrawal amount is too small');
+        }
+
+        if($request->charges == null or $request->charges < 1){
+            $request->charges = 0;
+        }
+        $totalAmount = $request->amount + $request->charges;
+        if($totalAmount > $customerWallet->balance){
+            return back()->with('error', 'Total amount to be withdrawn is more than the customer\'s balance');
+        }
+
+        $branchWallet = BranchWallet::where('branch_id', auth()->guard('manager')->user()->branch_id)->first();
+        $cashBalance = $branchWallet->cash;
+        $bankBalance = $branchWallet->bank;
+
+        if($request->option === 'cash' and $totalAmount > $cashBalance ){
+            return back()->with('error', 'Total amount to be withdrawn is more than the branch\'s cash balance. Use another withdrawal option or contact manager');
+        }
+        if($request->option === 'bank' and $totalAmount > $bankBalance ){
+            return back()->with('error', 'Total amount to be withdrawn is more than the customer\'s bank balance. Use another withdrawal option or contact manager');
+        }
+
+
+        $t = Transaction::create([
+            'user_id' => auth()->guard('manager')->user()->id,
+            'branch_id' => auth()->guard('manager')->user()->branch_id,
+            'customer_id' => $customer->id,
+            'txn_ref' => Str::random(10),
+            'txn_type' => 'debit',
+            'user_type' => 'user',
+            'purpose' => 'withdrawal',
+            'option' => $request->option,
+            'amount' => $request->amount,
+            'balance_before' => $customerWallet->balance,
+            'balance_after' => $customerWallet->balance - $request->amount,
+            'description' => 'Withdrawal for ' . $customer->first_name . ' ' . $customer->surname . ' by ' . auth()->guard('manager')->user()->name,
+            'remark' => $request->remark,
+        ]);
+
+        $customerWallet->balance = $customerWallet->balance - $request->amount;
+        $customerWallet->save();
+
+        if($request->option === 'bank'){
+            BranchWallet::updateOrCreate(['branch_id' => auth()->guard('manager')->user()->branch_id],
+                ['balance' => DB::raw('balance -'. $request->amount),
+                    'bank' => DB::raw('bank -'. $request->amount),
+                ]);
+        }else{
+            BranchWallet::updateOrCreate(['branch_id' => auth()->guard('manager')->user()->branch_id],
+                ['balance' => DB::raw('balance -'. $request->amount),
+                    'cash' => DB::raw('cash -'. $request->amount)]);
+        }
+        if($request->charges > 0){
+            Transaction::create([
+                'user_id' => auth()->guard('manager')->user()->id,
+                'branch_id' => auth()->guard('manager')->user()->branch_id,
+                'customer_id' => $customer->id,
+                'txn_ref' => Str::random(10),
+                'txn_type' => 'debit',
+                'user_type' => 'user',
+                'purpose' => 'commission',
+                'option' => $request->option,
+                'amount' => $request->charges,
+                'balance_before' => $t->balance_after,
+                'balance_after' => $t->balance_after - $request->charges,
+                'description' => 'Commission from ' . $customer->first_name . ' ' . $customer->surname . '\'s withdrawal by ' . auth()->guard('manager')->user()->name,
+                'remark' => $request->remark,
+            ]);
+
+            $customerWallet->balance = $customerWallet->balance - $request->charges;
+            $customerWallet->save();
+        }
+
+
+        return redirect(route('manager.show', $request->id))->with('success', 'Withdrawal successful');
     }
 
 

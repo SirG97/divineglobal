@@ -52,6 +52,7 @@
                                 <th class="border-top-0">Joined</th>
                                 <th class="border-top-0">Status</th>
                                 <th class="border-top-0">Edit</th>
+                                <th class="border-top-0">Delete</th>
 {{--                                <th class="border-top-0">Block</th>--}}
 {{--                                <th class="border-top-0">Delete</th>--}}
                             </tr>
@@ -94,12 +95,20 @@
 {{--                                            </button>--}}
 {{--                                        </td>--}}
                                         <td>
-                                            <button class="btn btn-danger btn-sm inline-block text-white"
+                                            <button class="btn btn-warning btn-sm inline-block text-white"
                                                     data-toggle="modal"
                                                     data-target="#updateMarketer"
                                                     data-name="{{ $user['name'] }}"
                                                     data-email="{{ $user['email'] }}"
                                                     data-id="{{ $user['id'] }}">Edit <i class="fa fa-edit"></i></button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm inline-block text-white"
+                                                    data-toggle="modal"
+                                                    data-target="#deleteMarketer"
+                                                    data-name="{{ $user['name'] }}"
+                                                    data-email="{{ $user['email'] }}"
+                                                    data-id="{{ $user['id'] }}">Delete <i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -209,41 +218,41 @@
 {{--        <!-- /.modal-dialog -->--}}
 {{--    </div>--}}
 
-{{--    <div id="deleteUser" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">--}}
-{{--        <div class="modal-dialog">--}}
-{{--            <div class="modal-content">--}}
-{{--                <form action="{{ route('admin.user.delete') }}" id="deleteUserForm" method="POST">--}}
-{{--                    <div class="modal-header d-flex align-items-center">--}}
-{{--                        <h4 class="modal-title" id="myModalLabel">--}}
-{{--                            Delete Marketer--}}
-{{--                        </h4>--}}
-{{--                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>--}}
-{{--                    </div>--}}
-{{--                    <div class="modal-body">--}}
-{{--                        @csrf--}}
-{{--                        <input type="hidden" value="" id="user_id" name="id">--}}
-{{--                        <p>Delete marketer? <br>This action is not reversible</p>--}}
-{{--                    </div>--}}
-{{--                    <div class="modal-footer">--}}
-{{--                        <button type="button" class="--}}
-{{--                                  btn btn-light-danger--}}
-{{--                                  text-danger--}}
-{{--                                  font-weight-medium--}}
-{{--                                  waves-effect" data-dismiss="modal">--}}
-{{--                            Close--}}
-{{--                        </button>--}}
-{{--                        <button id="deleteUserBtn" type="submit" class="--}}
-{{--                                  btn btn-danger--}}
-{{--                                  font-weight-medium--}}
-{{--                                  text-white--}}
-{{--                                  waves-effect">--}}
-{{--                            Delete Marketer--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
-{{--                </form>--}}
-{{--            </div>--}}
-{{--            <!-- /.modal-content -->--}}
-{{--        </div>--}}
-{{--        <!-- /.modal-dialog -->--}}
-{{--    </div>--}}
+    <div id="deleteMarketer" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('manager.user.delete') }}" id="deleteMarketerForm" method="POST">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myModalLabel">
+                            Delete Marketer
+                        </h4>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <input type="hidden" value="" id="user_id" name="id">
+                        <p>Delete marketer? <br>This action is not reversible</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="
+                                  btn btn-light-danger
+                                  text-danger
+                                  font-weight-medium
+                                  waves-effect" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button id="deleteMarketerBtn" type="submit" class="
+                                  btn btn-danger
+                                  font-weight-medium
+                                  text-white
+                                  waves-effect">
+                            Delete Marketer
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection

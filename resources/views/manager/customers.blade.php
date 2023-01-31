@@ -46,9 +46,13 @@
                             <thead>
                             <tr>
                                 <th class="border-top-0">Name</th>
-                                <th class="border-top-0">Phone</th>
+                                <th class="border-top-0">Account ID</th>
+                                <th class="border-top-0">Marketer </th>
+{{--                                <th class="border-top-0">Phone</th>--}}
                                 <th class="border-top-0">Joined on</th>
                                 <th class="border-top-0">View</th>
+{{--                                <th class="border-top-0">Edit</th>--}}
+                                <th class="border-top-0">Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,10 +60,26 @@
                                 @foreach($users as $user)
                                     <tr>
                                         <td scope="row">{{ $user['first_name'] }} {{ $user['surname'] }}</td>
-                                        <td>{{ $user['phone'] }}</td>
+                                        <td scope="row">{{ $user['account_id']  }}</td>
+                                        <td scope="row">{{ ($user['user']) ? $user['user']['name'] : 'Deleted'  }}</td>
+{{--                                        <td>{{ $user['phone'] }}</td>--}}
                                         <td>{{ $user['created_at']->diffForHumans() }}</td>
                                         <td>
                                             <a class="btn btn-info btn-sm inline-block" href="{{ route('manager.show', $user['id']) }}">View</a>
+                                        </td>
+{{--                                        <td>--}}
+{{--                                            <a--}}
+{{--                                                class="btn btn-warning btn-sm inline-block"--}}
+{{--                                                data-toggle="modal"--}}
+{{--                                                data-target="#updateCustomer"--}}
+{{--                                               href="#">Edit</a>--}}
+{{--                                        </td>--}}
+                                        <td>
+                                            <a class="btn btn-danger btn-sm inline-block"
+                                                data-toggle="modal"
+                                               data-id="{{ $user['id'] }}"
+                                                data-target="#deleteUser">
+                                                Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -83,7 +103,7 @@
             </div>
         </div>
     </div>
-    <div id="blockUser" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+    <div id="updateCustomer" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="" id="blockUserForm" method="POST">
@@ -124,17 +144,17 @@
     <div id="deleteUser" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="" id="deleteUserForm" method="POST">
+                <form action="{{route('manager.customer.delete')}}" id="deleteUserForm" method="POST">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Delete User
+                            Delete Customer
                         </h4>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         @csrf
                         <input type="hidden" value="" id="user_id" name="id">
-                        <p>Delete user? <br>This action is not reversible</p>
+                        <p>Delete customer? <br>Every data related to this user will be erased. This action is not reversible</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="
@@ -149,7 +169,7 @@
                                   font-weight-medium
                                   text-white
                                   waves-effect">
-                            Delete User
+                            Delete Customer
                         </button>
                     </div>
                 </form>

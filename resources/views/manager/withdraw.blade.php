@@ -1,7 +1,5 @@
-@extends('layouts.dashboard')
-@section('page')
-    Customer info
-@endsection
+@extends('manager.layouts.managerbase')
+
 @section('content')
     <div class="container-fluid">
 
@@ -34,15 +32,25 @@
             <div class="col-lg-8 col-xlg-9 col-md-12">
 
                 <div class="card">
-                    <div class="card-header">Save
+                    <div class="card-header">
+{{--                        save--}}
                         <div class="mt-1">
-{{--                            <a class="btn btn-danger text-white" href="{{ route('withdraw', $user->id) }}">Withdraw</a>--}}
-                            <a class="btn btn-info text-white"  href="{{ route('customer.history', $user->id) }}">History</a>
+{{--                            <a class="btn btn-success text-white" href="{{ route('save', $user->id) }}">Save</a>--}}
+                            <a class="btn btn-info text-white"  href="{{ route('manager.history', $user->id) }}">History</a>
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class="form-horizontal form-material" method="POST" action="{{ route('mark') }}">
+                        <form class="form-horizontal form-material" method="POST" action="{{ route('manager.withdraw.store') }}">
                             @csrf
+                            <div class="form-group mb-4">
+                                <label class="col-md-12 p-0">Account number</label>
+                                <div class="col-md-12 border-bottom p-0">
+                                    <input type="text"
+                                           name="account_number" id="account_id"
+                                           class="form-control p-0 border-0"
+                                           value="{{ $user->account_id }}" readonly>
+                                </div>
+                            </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Name</label>
                                 <div class="col-md-12 border-bottom p-0">
@@ -52,25 +60,25 @@
                                     <input type="hidden" name="id" value="{{ $user->id }}">
                                 </div>
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="col-md-12 p-0">Account number</label>
-                                <div class="col-md-12 border-bottom p-0">
-                                    <input type="text"
-                                           name="account_number" id="account_number"
-                                           class="form-control p-0 border-0"
-                                           value="{{ $user->account_id }}" readonly>
-                                </div>
-                            </div>
 
                             <div class="form-group mb-4">
-                                <label for="amount" class="col-md-12 p-0">Amount</label>
-                                <div class="col-md-12 border-bottom p-0">
-                                    <input type="text" placeholder="₦150000" class="form-control p-0 border-0" name="amount" id="amount" autocomplete="off"
-                                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+                                <label class="col-md-12 p-0">Amount to withdraw(₦)</label>
+                                <div class="col-md-12 border-bottom p-0" >
+                                    <input type="text"  name="amount"
+                                           value=""
+                                           class="form-control p-0 border-0">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
-                                <label for="option" class="col-md-12 p-0">Deposit option</label>
+                                <label class="col-md-12 p-0">Charges(₦)</label>
+                                <div class="col-md-12 border-bottom p-0" >
+                                    <input type="text"  name="charges"
+                                           value=""
+                                           class="form-control p-0 border-0">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="option" class="col-md-12 p-0">Withdrawal option</label>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="switch">
                                         <div class="form-check form-check-inline">
@@ -92,7 +100,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-success text-white">Save</button>
+                                <button type="submit" class="btn btn-danger text-white">Withdraw</button>
                             </div>
                         </form>
                     </div>

@@ -246,6 +246,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     });
 
+
+    $('#deleteMarketer').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+
+        let modal = $(this);
+        // modal.find('#blockUserForm').attr("action", form_action);
+        modal.find('#user_id').val(id);
+
+    });
+
+    $('#deleteMarketerBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#deleteMarketerForm").trigger('submit');
+    });
+
     rejectLoan.on('click', (e)=>{
         e.preventDefault();
         $("#rejectLoanForm").trigger('submit');
