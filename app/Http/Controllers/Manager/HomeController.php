@@ -52,7 +52,6 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        dd('yearly credit is '. $yearlyCredit, 'yearly debit is '. $yearlyDebit);
 
         $profit = Transaction::where([['purpose', '=', 'commission']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
@@ -69,6 +68,7 @@ class HomeController extends Controller
         }else{
             $balance = $b->balance;
         }
+        dd('Year balance is ' . $yearlyCredit - $yearlyDebit - $expenses);
 //
 //        $loanTaken = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
 //            Carbon::now()->startOfYear(),
