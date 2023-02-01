@@ -68,7 +68,7 @@ class HomeController extends Controller
         }else{
             $balance = $b->balance;
         }
-        dd('Year balance is ' . $yearlyCredit - $yearlyDebit - $expenses);
+        dd('Year balance is ' . $yearlyCredit - $yearlyDebit , $expenses);
 //
 //        $loanTaken = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
 //            Carbon::now()->startOfYear(),
