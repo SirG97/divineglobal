@@ -52,8 +52,8 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        dd('yearly credit is '. $yearlyCredit);
-        dd('yearly debit is '. $yearlyDebit);
+        dd('yearly credit is '. $yearlyCredit, 'yearly debit is '. $yearlyDebit);
+
         $profit = Transaction::where([['purpose', '=', 'commission']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
