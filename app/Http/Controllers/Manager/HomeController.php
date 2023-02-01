@@ -62,13 +62,13 @@ class HomeController extends Controller
             Carbon::now()->endOfYear(),
         ])->sum('amount');
 
-        $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
-        if(!$b){
-            $balance = 0;
-        }else{
-            $balance = $b->balance;
-        }
-        dd('Year balance is ' . ($yearlyCredit - $yearlyDebit - $expenses));
+//        $b = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->first();
+//        if(!$b){
+//            $balance = 0;
+//        }else{
+//            $balance = $b->balance;
+//        }
+        $balance =  ($yearlyCredit - $yearlyDebit - $expenses);
 //
 //        $loanTaken = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['purpose', '=', 'loan']])->whereBetween('created_at', [
 //            Carbon::now()->startOfYear(),
