@@ -53,11 +53,11 @@ class HomeController extends Controller
             Carbon::now()->endOfYear(),
         ])->sum('amount');
 
-        $profit = Transaction::where([['purpose', '=', 'commission']])->whereBetween('created_at', [
+        $profit = Transaction::where([['branch_id','=', $branch],['purpose', '=', 'commission']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $profit_t = Transaction::where([['purpose', '=', 'commission']])->whereBetween('created_at', [
+        $profit_t = Transaction::where([['branch_id','=', $branch],['purpose', '=', 'commission']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->get();
