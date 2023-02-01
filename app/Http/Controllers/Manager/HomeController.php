@@ -164,7 +164,7 @@ class HomeController extends Controller
         ]);
 
         try{
-            $transactions = Transaction::where('user_id', $request->id)->get();
+            $transactions = Transaction::where([['customer_id', '=', $request->id]])->get();
 
             foreach ($transactions as $transaction){
                 $transaction->delete();
