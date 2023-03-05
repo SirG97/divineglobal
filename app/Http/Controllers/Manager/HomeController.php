@@ -384,18 +384,18 @@ class HomeController extends Controller
             'old_password' => 'required',
             'password' => 'required|string|min:8|confirmed'
         ]);
-        $user = User::where('id',auth('manager')->user()->id)->first();
+        $user = Manager::where('id',auth('manager')->user()->id)->first();
         if (Hash::check($request->old_password, $user->password)) {
-            dd('hey');
+            
             $user->password = Hash::make($request->password);
             $user->save();
 //            $audit['user_id']= Auth::guard()->user()->id;
 //            $audit['reference']=Str::random(16);
 //            $audit['log']='Changed Password';
 //            Audit::create($audit);
-            return back()->with('success', 'Password Changed successfully.');
+            return redirect()->back()->with('success', 'Password Changed successfully.');
         }elseif (!Hash::check($request->password, $user->password)) {
-            return back()->with('error', 'Invalid password');
+            return redirect()->back()->with('error', 'Invalid password');
         }
     }
 
