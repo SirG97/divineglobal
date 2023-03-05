@@ -57,7 +57,7 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        
+
         $expenses = Transaction::where([['branch_id','=', $branch],['txn_type','=','debit'],['purpose', '=', 'logistics']])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
@@ -386,6 +386,7 @@ class HomeController extends Controller
         ]);
         $user = User::where('id',auth('manager')->user()->id)->first();
         if (Hash::check($request->old_password, $user->password)) {
+            dd('hey');
             $user->password = Hash::make($request->password);
             $user->save();
 //            $audit['user_id']= Auth::guard()->user()->id;
