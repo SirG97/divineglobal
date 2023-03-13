@@ -40,7 +40,7 @@ class HomeController extends Controller
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $commission = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'debit'],['purpose', '=', 'commission']])->whereBetween('created_at', [
+        $commission = Transaction::where([['user_id','=', auth()->user()->id], ['txn_type', '=', 'debit'],['purpose', '=', 'commission'], ['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear()
         ])->sum('amount');

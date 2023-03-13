@@ -43,22 +43,22 @@ class HomeController extends Controller
         $branch = auth('manager')->user()->branch_id;
         $totalMarketers =  User::where('branch_id', $branch)->count();
         $totalCustomers = Customer::where('branch_id', $branch)->count();
-        $yearlyCredit= Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
+        $yearlyCredit= Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'credit'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
 
-        $yearlyDebit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'], ['purpose','=','withdrawal'],['purpose','!=','commission']])->whereBetween('created_at', [
+        $yearlyDebit = Transaction::where([['branch_id','=', $branch], ['txn_type', '=', 'debit'], ['purpose','=','withdrawal'],['purpose','!=','commission'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
 
-        $profit = Transaction::where([['branch_id','=', $branch],['purpose', '=', 'commission']])->whereBetween('created_at', [
+        $profit = Transaction::where([['branch_id','=', $branch],['purpose', '=', 'commission'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
 
-        $expenses = Transaction::where([['branch_id','=', $branch],['txn_type','=','debit'],['purpose', '=', 'logistics']])->whereBetween('created_at', [
+        $expenses = Transaction::where([['branch_id','=', $branch],['txn_type','=','debit'],['purpose', '=', 'logistics'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
@@ -398,6 +398,7 @@ class HomeController extends Controller
 //            dd($transactionToReverse, $latestTransaction);
             $transactionToReverse->delete();
         }else{
+            $branchWallet = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->firstOrFail();
             $transactionToReverse->reverse_status = 1;
             $transactionToReverse->save();
             Transaction::create([
@@ -410,8 +411,8 @@ class HomeController extends Controller
                 'purpose' => 'reversal',
                 'option' => $transactionToReverse->option,
                 'amount' => $transactionToReverse->amount,
-                'balance_before' => $wallet->balance,
-                'balance_after' => $wallet->balance - $transactionToReverse->amount,
+                'balance_before' => $branchWallet->balance,
+                'balance_after' => $branchWallet->balance - $transactionToReverse->amount,
                 'description' => 'Reversal for transaction ' . $transactionToReverse->txn_ref ,
                 'remark' => $transactionToReverse->remark,
                 'reverse_status' => 1
@@ -420,8 +421,8 @@ class HomeController extends Controller
 
         if($transactionToReverse->option === 'bank'){
             BranchWallet::updateOrCreate(['branch_id' => auth('manager')->user()->branch_id],
-                ['balance' => DB::raw('balance -' . $request->amount),
-                    'bank' => DB::raw('bank -' . $request->amount)]);
+                ['balance' => DB::raw('balance -' . $transactionToReverse->amount),
+                    'bank' => DB::raw('bank -' . $transactionToReverse->amount)]);
         }else{
             BranchWallet::updateOrCreate(['branch_id' => auth('manager')->user()->branch_id],
                 ['balance' => DB::raw('balance -' . $transactionToReverse->amount),

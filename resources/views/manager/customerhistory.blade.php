@@ -81,11 +81,14 @@
                                             @endif
 
                                             ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
+                                                @if($transaction->reverse_status == 0)
                                                 <br>
+
                                                 <button class="btn btn-sm btn-danger text-white"
                                                         data-toggle="modal"
                                                         data-target="#reverseTransaction"
                                                         data-txn_ref="{{ $transaction->txn_ref }}">Reverse</button>
+                                                @endif
                                             </td>
                                         </tr>
 

@@ -38,19 +38,19 @@ class HomeController extends Controller
 
         $totalMarketers =  User::count();
         $totalCustomers = Customer::count();
-        $yearlyCredit = Transaction::where([['txn_type','=','credit'],['purpose', '=', 'deposit']])->whereBetween('created_at', [
+        $yearlyCredit = Transaction::where([['txn_type','=','credit'],['purpose', '=', 'deposit'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $yearlyDebit = Transaction::where([['txn_type','=','debit'],['purpose', '=', 'withdrawal']])->whereBetween('created_at', [
+        $yearlyDebit = Transaction::where([['txn_type','=','debit'],['purpose', '=', 'withdrawal'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $expenses = Transaction::where([['txn_type','=','debit'],['purpose', '=', 'logistics']])->whereBetween('created_at', [
+        $expenses = Transaction::where([['txn_type','=','debit'],['purpose', '=', 'logistics'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $profit = Transaction::where([['purpose', '=', 'commission']])->whereBetween('created_at', [
+        $profit = Transaction::where([['purpose', '=', 'commission'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
@@ -115,7 +115,7 @@ class HomeController extends Controller
 
     public function managers(){
         $managers = Manager::with('branch')->get();
-        
+
         return view('admin.managers', compact('managers'));
     }
 
