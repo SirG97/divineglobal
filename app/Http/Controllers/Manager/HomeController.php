@@ -380,19 +380,25 @@ class HomeController extends Controller
         ]);
 
         $transactionToReverse = Transaction::where('txn_ref', $request->txn_ref)->first();
-        $latestTransaction = Transaction::latest('id')->first();
+        $latestTransaction = Transaction::where('branch_id', auth('manager')->user()->branch_id)->latest('id')->first();
         if($transactionToReverse == null){
             return back()->with('error', 'Could not retrieve customer wallet');
         }
         if($transactionToReverse->reverse_status !== 0){
             return back()->with('error', 'You cannot reverse this transaction again');
         }
-        $wallet = Wallet::where([['customer_id', '=', $transactionToReverse->customer_id]])->first();
-        if(!$wallet){
-            return back()->with('error', 'Could not retrieve customer wallet');
+
+        if($transactionToReverse->user_type == 'manager'){
+
+        }else{
+            $wallet = Wallet::where([['customer_id', '=', $transactionToReverse->customer_id]])->first();
+            if(!$wallet){
+                return back()->with('error', 'Could not retrieve customer wallet');
+            }
+            $wallet->balance -= $transactionToReverse->amount;
+//            $wallet->save();
         }
-        $wallet->balance -= $transactionToReverse->amount;
-        $wallet->save();
+
 
         if($transactionToReverse->txn_ref === $latestTransaction->txn_ref){
 //            dd($transactionToReverse, $latestTransaction);
@@ -401,18 +407,27 @@ class HomeController extends Controller
             $branchWallet = BranchWallet::where('branch_id', auth('manager')->user()->branch_id)->firstOrFail();
             $transactionToReverse->reverse_status = 1;
             $transactionToReverse->save();
+            if($transactionToReverse->user_type == 'user'){
+                $bb = $wallet->balance;
+                $ba = $wallet->balance - $transactionToReverse->amount;
+                $type = 'debit';
+            }else{
+                $bb = $branchWallet->balance;
+                $ba = $branchWallet->balance - $transactionToReverse->amount;
+                $type = 'credit';
+            }
             Transaction::create([
                 'user_id' => $transactionToReverse->id,
                 'branch_id' => $transactionToReverse->branch_id,
                 'customer_id' => $transactionToReverse->customer_id,
                 'txn_ref' => Str::random(10),
                 'user_type' => $transactionToReverse->user_type,
-                'txn_type' => 'debit',
+                'txn_type' => $type,
                 'purpose' => 'reversal',
                 'option' => $transactionToReverse->option,
                 'amount' => $transactionToReverse->amount,
-                'balance_before' => $branchWallet->balance,
-                'balance_after' => $branchWallet->balance - $transactionToReverse->amount,
+                'balance_before' =>$bb,
+                'balance_after' => $ba,
                 'description' => 'Reversal for transaction ' . $transactionToReverse->txn_ref ,
                 'remark' => $transactionToReverse->remark,
                 'reverse_status' => 1
@@ -420,14 +435,31 @@ class HomeController extends Controller
         }
 
         if($transactionToReverse->option === 'bank'){
-            BranchWallet::updateOrCreate(['branch_id' => auth('manager')->user()->branch_id],
-                ['balance' => DB::raw('balance -' . $transactionToReverse->amount),
-                    'bank' => DB::raw('bank -' . $transactionToReverse->amount)]);
+            dd($transactionToReverse->option);
+            if($transactionToReverse->user_type == 'user'){
+                $branchWallet->balance = $branchWallet->balance - $transactionToReverse->amount;
+                $branchWallet->bank = $branchWallet->bank - $transactionToReverse->amount;
+                $branchWallet->save();
+            }else{
+                $branchWallet->balance = $branchWallet->balance + $transactionToReverse->amount;
+                $branchWallet->bank = $branchWallet->bank + $transactionToReverse->amount;
+                $branchWallet->save();
+            }
+
         }else{
-            BranchWallet::updateOrCreate(['branch_id' => auth('manager')->user()->branch_id],
-                ['balance' => DB::raw('balance -' . $transactionToReverse->amount),
-                    'cash' => DB::raw('cash -' . $transactionToReverse->amount),
-                ]);
+
+            if($transactionToReverse->user_type == 'user'){
+
+                $branchWallet->balance = $branchWallet->balance - $transactionToReverse->amount;
+                $branchWallet->cash = $branchWallet->cash - $transactionToReverse->amount;
+                $branchWallet->save();
+            }else{
+
+               $branchWallet->balance = $branchWallet->balance + $transactionToReverse->amount;
+               $branchWallet->cash = $branchWallet->cash + $transactionToReverse->amount;
+               $branchWallet->save();
+            }
+
         }
 
         return back()->with('success', 'Transaction reversed successfully');
