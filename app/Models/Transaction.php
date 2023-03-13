@@ -10,7 +10,7 @@ class Transaction extends Model
     use HasFactory;
     protected $fillable = [
         'user_id','user_type', 'option', 'branch_id','customer_id','txn_ref','txn_type','purpose', 'amount',
-        'balance_before', 'balance_after', 'description',  'remark'
+        'balance_before', 'balance_after', 'description',  'remark', 'reverse_status'
     ];
 
     public function user(){

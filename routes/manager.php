@@ -64,3 +64,5 @@ Route::post('/marketer/delete', [App\Http\Controllers\Manager\HomeController::cl
 
 Route::get('/withdraw/{id}', [App\Http\Controllers\Manager\HomeController::class, 'withdraw'])->name('withdraw');
 Route::post('/withdraw', [App\Http\Controllers\Manager\HomeController::class, 'storeWithdraw'])->name('withdraw.store');
+
+Route::post('/transaction/reverse', [App\Http\Controllers\Manager\HomeController::class, 'reverseTransaction'])->name('transaction.reverse');

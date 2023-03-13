@@ -374,6 +374,65 @@ class HomeController extends Controller
         return view('manager.customerhistory', compact('transactions', 'balance'));
     }
 
+    public function reverseTransaction(Request $request){
+        $request->validate([
+            'txn_ref' => 'required'
+        ]);
+
+        $transactionToReverse = Transaction::where('txn_ref', $request->txn_ref)->first();
+        $latestTransaction = Transaction::latest('id')->first();
+        if($transactionToReverse == null){
+            return back()->with('error', 'Could not retrieve customer wallet');
+        }
+        if($transactionToReverse->reverse_status !== 0){
+            return back()->with('error', 'You cannot reverse this transaction again');
+        }
+        $wallet = Wallet::where([['customer_id', '=', $transactionToReverse->customer_id]])->first();
+        if(!$wallet){
+            return back()->with('error', 'Could not retrieve customer wallet');
+        }
+        $wallet->balance -= $transactionToReverse->amount;
+        $wallet->save();
+
+        if($transactionToReverse->txn_ref === $latestTransaction->txn_ref){
+//            dd($transactionToReverse, $latestTransaction);
+            $transactionToReverse->delete();
+        }else{
+            $transactionToReverse->reverse_status = 1;
+            $transactionToReverse->save();
+            Transaction::create([
+                'user_id' => $transactionToReverse->id,
+                'branch_id' => $transactionToReverse->branch_id,
+                'customer_id' => $transactionToReverse->customer_id,
+                'txn_ref' => Str::random(10),
+                'user_type' => $transactionToReverse->user_type,
+                'txn_type' => 'debit',
+                'purpose' => 'reversal',
+                'option' => $transactionToReverse->option,
+                'amount' => $transactionToReverse->amount,
+                'balance_before' => $wallet->balance,
+                'balance_after' => $wallet->balance - $transactionToReverse->amount,
+                'description' => 'Reversal for transaction ' . $transactionToReverse->txn_ref ,
+                'remark' => $transactionToReverse->remark,
+                'reverse_status' => 1
+            ]);
+        }
+
+        if($transactionToReverse->option === 'bank'){
+            BranchWallet::updateOrCreate(['branch_id' => auth('manager')->user()->branch_id],
+                ['balance' => DB::raw('balance -' . $request->amount),
+                    'bank' => DB::raw('bank -' . $request->amount)]);
+        }else{
+            BranchWallet::updateOrCreate(['branch_id' => auth('manager')->user()->branch_id],
+                ['balance' => DB::raw('balance -' . $transactionToReverse->amount),
+                    'cash' => DB::raw('cash -' . $transactionToReverse->amount),
+                ]);
+        }
+
+        return back()->with('success', 'Transaction reversed successfully');
+
+    }
+
 
     public function password(){
         return view('manager.password');
@@ -386,7 +445,7 @@ class HomeController extends Controller
         ]);
         $user = Manager::where('id',auth('manager')->user()->id)->first();
         if (Hash::check($request->old_password, $user->password)) {
-            
+
             $user->password = Hash::make($request->password);
             $user->save();
 //            $audit['user_id']= Auth::guard()->user()->id;

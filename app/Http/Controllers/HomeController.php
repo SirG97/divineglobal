@@ -32,11 +32,11 @@ class HomeController extends Controller
     public function index()
     {
         $totalCustomers = Customer::where('user_id', auth()->user()->id)->count();
-        $yearlyCredit = Transaction::where([['user_id','=', auth()->user()->id], ['user_type', '=', 'user'], ['txn_type', '=', 'credit']])->whereBetween('created_at', [
+        $yearlyCredit = Transaction::where([['user_id','=', auth()->user()->id], ['user_type', '=', 'user'], ['txn_type', '=', 'credit'],['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');
-        $yearlyDebit = Transaction::where([['user_id','=', auth()->user()->id],['user_type', '=', 'user'], ['txn_type', '=', 'debit']])->whereBetween('created_at', [
+        $yearlyDebit = Transaction::where([['user_id','=', auth()->user()->id],['user_type', '=', 'user'], ['txn_type', '=', 'debit'], ['reverse_status','=',0]])->whereBetween('created_at', [
             Carbon::now()->startOfYear(),
             Carbon::now()->endOfYear(),
         ])->sum('amount');

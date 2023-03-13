@@ -332,6 +332,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         $("#rejectLoanForm").trigger('submit');
     });
 
+
+    // Reverse transaction
+    $('#reverseTransaction').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let txn_ref = button.data('txn_ref'); // Extract info from data-* attributes
+       // Extract info from data-* attributes
+        console.log(txn_ref);
+        let modal = $(this);
+        modal.find('#txn_ref').val(txn_ref);
+
+    });
+
+    $('#reverseTransactionBtn').on('click', (e)=>{
+        e.preventDefault();
+        $("#reverseTransactionForm").trigger('submit');
+    });
+
     /*
         Delete coin ends
      */

@@ -81,6 +81,11 @@
                                             @endif
 
                                             ₦{{ number_format($transaction->amount, '2', '.', ',') }}</span>
+                                                <br>
+                                                <button class="btn btn-sm btn-danger text-white"
+                                                        data-toggle="modal"
+                                                        data-target="#reverseTransaction"
+                                                        data-txn_ref="{{ $transaction->txn_ref }}">Reverse</button>
                                             </td>
                                         </tr>
 
@@ -103,5 +108,41 @@
 
         </div>
     </div>
-
+    <div id="reverseTransaction" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('manager.transaction.reverse') }}" id="reverseTransactionForm" method="POST">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myModalLabel">
+                            Reverse Transaction
+                        </h4>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @csrf
+                        <input type="hidden" value="" id="txn_ref" name="txn_ref">
+                        <p>Are you sure you want to reverse this transaction?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="
+                                  btn btn-light-danger
+                                  text-danger
+                                  font-weight-medium
+                                  waves-effect" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button id="reverseTransactionBtn" type="submit" class="
+                                  btn btn-danger
+                                  font-weight-medium
+                                  text-white
+                                  waves-effect">
+                            Reverse
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection
